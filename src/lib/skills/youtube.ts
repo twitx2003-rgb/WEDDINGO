@@ -12,12 +12,38 @@ export interface YouTubeVideo {
   description: string
 }
 
+async function resolveToChannelId(apiKey: string, value: string): Promise<string | null> {
+  // Already a UC... channel ID
+  if (value.startsWith('UC')) return value
+
+  // @handle or full URL containing @handle
+  const handleMatch = value.match(/@([\w.-]+)/)
+  if (handleMatch) {
+    const url = new URL('https://www.googleapis.com/youtube/v3/channels')
+    url.searchParams.set('key', apiKey)
+    url.searchParams.set('forHandle', handleMatch[1])
+    url.searchParams.set('part', 'id')
+    const res = await fetch(url.toString())
+    if (!res.ok) return null
+    const data = await res.json()
+    return data.items?.[0]?.id ?? null
+  }
+
+  return value
+}
+
 export async function listRecentVideos(sinceDays = 2): Promise<YouTubeVideo[]> {
   const apiKey = await config.youtubeApiKey()
-  const channelId = await config.channelId()
+  const channelRaw = await config.channelId()
 
-  if (!apiKey || !channelId) {
+  if (!apiKey || !channelRaw) {
     console.warn('[YouTube] API key or channel ID not configured — skipping video fetch')
+    return []
+  }
+
+  const channelId = await resolveToChannelId(apiKey, channelRaw)
+  if (!channelId) {
+    console.warn('[YouTube] Could not resolve channel ID from:', channelRaw)
     return []
   }
 
@@ -27,7 +53,6 @@ export async function listRecentVideos(sinceDays = 2): Promise<YouTubeVideo[]> {
 
   const videos: YouTubeVideo[] = []
 
-  // Fetch regular videos and shorts
   const searchUrl = new URL('https://www.googleapis.com/youtube/v3/search')
   searchUrl.searchParams.set('key', apiKey)
   searchUrl.searchParams.set('channelId', channelId)
