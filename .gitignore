@@ -34,9 +34,9 @@ yarn-error.log*
 .env*
 !.env.example
 
-# SQLite database
-prisma/*.db
-prisma/*.db-journal
+# SQLite database (Prisma resolves path relative to schema dir)
+prisma/**/*.db
+prisma/**/*.db-journal
 
 # vercel
 .vercel
