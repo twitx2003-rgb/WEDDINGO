@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Video {
+  id                String   @id @default(cuid())
+  platform          String
+  externalId        String   @unique
+  title             String
+  description       String?
+  url               String
+  publishedAt       DateTime
+  channelId         String?
+  thumbnailUrl      String?
+  duration          Int?
+  viewCount         Int?
+  likeCount         Int?
+  isLive            Boolean  @default(false)
+  transcriptFetched Boolean  @default(false)
+  analyzed          Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  newsItems StockRecommendation[]
+  stockRecs NewsItem[]
+
+  @@index([platform, publishedAt])
+  @@index([analyzed])
+}
+
+model NewsItem {
+  id          String   @id @default(cuid())
+  videoId     String
+  video       Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  headline    String
+  body        String
+  category    String
+  sentiment   String
+  tickers     String
+  quote       String?
+  importance  Int      @default(5)
+  publishedAt DateTime
+  createdAt   DateTime @default(now())
+
+  @@index([publishedAt])
+  @@index([category, sentiment])
+}
+
+model StockRecommendation {
+  id          String   @id @default(cuid())
+  videoId     String
+  video       Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  ticker      String
+  companyName String
+  action      String
+  confidence  Int
+  reason      String
+  quote       String?
+  priceAtTime Float?
+  targetPrice Float?
+  publishedAt DateTime
+  createdAt   DateTime @default(now())
+
+  @@index([ticker])
+  @@index([publishedAt])
+  @@index([confidence])
+}
+
+model AgentRun {
+  id              String    @id @default(cuid())
+  startedAt       DateTime  @default(now())
+  finishedAt      DateTime?
+  status          String
+  videosFound     Int       @default(0)
+  videosAnalyzed  Int       @default(0)
+  newsExtracted   Int       @default(0)
+  stocksExtracted Int       @default(0)
+  errorMessage    String?
+}
+
+model Settings {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
