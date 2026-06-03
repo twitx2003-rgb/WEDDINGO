@@ -78,9 +78,8 @@ export function ApiKeyForm({ onSaved }: { onSaved: () => void }) {
     setTriggering(true)
     setTriggerState('idle')
     try {
-      const res = await fetch('/api/agent/trigger', {
+      const res = await fetch('/api/agent/start', {
         method: 'POST',
-        headers: { Authorization: 'Bearer changeme123' },
       })
       if (res.ok) {
         setTriggerState('success')
