@@ -1,0 +1,9 @@
+{
+  "buildCommand": "prisma db push --skip-generate && next build",
+  "framework": "nextjs",
+  "functions": {
+    "src/app/api/agent/trigger/route.ts": {
+      "maxDuration": 60
+    }
+  }
+}
