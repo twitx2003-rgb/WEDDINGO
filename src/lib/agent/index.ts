@@ -23,7 +23,7 @@ export async function runAgent(): Promise<void> {
 
   try {
     // Step 2: Fetch recent YouTube videos
-    const videos = await listRecentVideos(2)
+    const videos = await listRecentVideos(14)
     videosFound += videos.length
     console.log(`[Agent] Found ${videos.length} YouTube videos`)
 
