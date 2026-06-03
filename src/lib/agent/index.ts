@@ -49,9 +49,11 @@ export async function runAgent(): Promise<void> {
       }
     }
 
-    // Step 3: Fetch transcripts for unanalyzed videos
+    // Step 3: Fetch transcripts for unanalyzed videos (max 5 per run to stay within timeout)
     const unanalyzed = await db.video.findMany({
       where: { analyzed: false, platform: 'youtube' },
+      orderBy: { publishedAt: 'desc' },
+      take: 5,
     })
 
     for (const video of unanalyzed) {
