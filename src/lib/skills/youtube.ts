@@ -95,6 +95,21 @@ export async function fetchTranscript(videoId: string): Promise<string | null> {
   }
 }
 
+export async function getVideoDescription(videoId: string, apiKey: string): Promise<string> {
+  try {
+    const url = new URL('https://www.googleapis.com/youtube/v3/videos')
+    url.searchParams.set('key', apiKey)
+    url.searchParams.set('id', videoId)
+    url.searchParams.set('part', 'snippet')
+    const res = await fetch(url.toString())
+    if (!res.ok) return ''
+    const data = await res.json()
+    return data.items?.[0]?.snippet?.description ?? ''
+  } catch {
+    return ''
+  }
+}
+
 export async function resolveChannelId(youtubeUrl: string): Promise<string | null> {
   const apiKey = await config.youtubeApiKey()
   if (!apiKey) return null

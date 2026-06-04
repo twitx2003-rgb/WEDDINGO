@@ -1,5 +1,6 @@
 import { db } from '../db'
-import { listRecentVideos, fetchTranscript } from '../skills/youtube'
+import { listRecentVideos, fetchTranscript, getVideoDescription } from '../skills/youtube'
+import { config } from '../env'
 import { analyzeTranscript } from '../skills/analysis'
 import { getQuote } from '../skills/stockPrice'
 import { fetchRecentTweets } from '../platforms/twitter'
@@ -56,17 +57,31 @@ export async function runAgent(): Promise<void> {
       take: 5,
     })
 
+    const apiKey = await config.youtubeApiKey() ?? ''
+
     for (const video of unanalyzed) {
       const transcript = await fetchTranscript(video.externalId)
+      const description = transcript
+        ? null
+        : (video.description || await getVideoDescription(video.externalId, apiKey))
+
+      const content = transcript ?? description
+      if (!content || content.trim().length < 50) {
+        console.log(`[Agent] Skipping ${video.title} — no content`)
+        await db.video.update({ where: { id: video.id }, data: { analyzed: true } })
+        continue
+      }
+
       if (transcript) {
         await db.video.update({
           where: { id: video.id },
           data: { transcriptFetched: true },
         })
+      }
 
-        // Step 4: Analyze with Claude
-        console.log(`[Agent] Analyzing: ${video.title}`)
-        const result = await analyzeTranscript(video.title, video.publishedAt, transcript)
+      // Step 4: Analyze with Claude
+      console.log(`[Agent] Analyzing: ${video.title}`)
+      const result = await analyzeTranscript(video.title, video.publishedAt, content)
 
         // Store news items
         for (const item of result.news) {
