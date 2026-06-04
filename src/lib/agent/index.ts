@@ -67,11 +67,10 @@ export async function runAgent(): Promise<void> {
 
     for (const video of unanalyzed) {
       const transcript = await fetchTranscript(video.externalId)
-      const description = transcript
-        ? null
-        : (video.description || await getVideoDescription(video.externalId, apiKey))
+      const content = transcript
+        ?? video.description
+        ?? await getVideoDescription(video.externalId, apiKey)
 
-      const content = transcript ?? description
       if (!content || content.trim().length < 50) {
         console.log(`[Agent] Skipping ${video.title} — no content`)
         await db.video.update({ where: { id: video.id }, data: { analyzed: true } })
@@ -79,63 +78,53 @@ export async function runAgent(): Promise<void> {
       }
 
       if (transcript) {
-        await db.video.update({
-          where: { id: video.id },
-          data: { transcriptFetched: true },
-        })
+        await db.video.update({ where: { id: video.id }, data: { transcriptFetched: true } })
       }
 
       // Step 4: Analyze with Claude
       console.log(`[Agent] Analyzing: ${video.title}`)
       const result = await analyzeTranscript(video.title, video.publishedAt, content)
 
-        // Store news items
-        for (const item of result.news) {
-          await db.newsItem.create({
-            data: {
-              videoId: video.id,
-              headline: item.headline,
-              body: item.body,
-              category: item.category,
-              sentiment: item.sentiment,
-              tickers: JSON.stringify(item.tickers ?? []),
-              quote: item.quote ?? null,
-              importance: item.importance,
-              publishedAt: video.publishedAt,
-            },
-          })
-          newsExtracted++
-        }
-
-        // Step 5: Store stock picks + fetch current price
-        for (const stock of result.stocks) {
-          const quote = await getQuote(stock.ticker)
-          await db.stockRecommendation.create({
-            data: {
-              videoId: video.id,
-              ticker: stock.ticker.toUpperCase(),
-              companyName: stock.companyName,
-              action: stock.action,
-              confidence: stock.confidence,
-              reason: stock.reason,
-              quote: stock.quote ?? null,
-              priceAtTime: quote?.price ?? null,
-              targetPrice: stock.targetPrice ?? null,
-              publishedAt: video.publishedAt,
-            },
-          })
-          stocksExtracted++
-        }
-
-        videosAnalyzed++
-      } else {
-        // No transcript available (live/Shorts) — mark as done
+      // Store news items
+      for (const item of result.news) {
+        await db.newsItem.create({
+          data: {
+            videoId: video.id,
+            headline: item.headline,
+            body: item.body,
+            category: item.category,
+            sentiment: item.sentiment,
+            tickers: JSON.stringify(item.tickers ?? []),
+            quote: item.quote ?? null,
+            importance: item.importance,
+            publishedAt: video.publishedAt,
+          },
+        })
+        newsExtracted++
       }
 
-      await db.video.update({
-        where: { id: video.id },
-        data: { analyzed: true },
-      })
+      // Step 5: Store stock picks + fetch current price
+      for (const stock of result.stocks) {
+        const quote = await getQuote(stock.ticker)
+        await db.stockRecommendation.create({
+          data: {
+            videoId: video.id,
+            ticker: stock.ticker.toUpperCase(),
+            companyName: stock.companyName,
+            action: stock.action,
+            confidence: stock.confidence,
+            reason: stock.reason,
+            quote: stock.quote ?? null,
+            priceAtTime: quote?.price ?? null,
+            targetPrice: stock.targetPrice ?? null,
+            publishedAt: video.publishedAt,
+          },
+        })
+        stocksExtracted++
+      }
+
+      videosAnalyzed++
+      await db.video.update({ where: { id: video.id }, data: { analyzed: true } })
     }
 
     // Step 6: Optional Twitter fetch
