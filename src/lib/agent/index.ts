@@ -50,9 +50,15 @@ export async function runAgent(): Promise<void> {
       }
     }
 
-    // Step 3: Fetch transcripts for unanalyzed videos (max 5 per run to stay within timeout)
+    // Step 3: Find videos to analyze — unanalyzed OR analyzed-but-empty (no news/stocks extracted yet)
     const unanalyzed = await db.video.findMany({
-      where: { analyzed: false, platform: 'youtube' },
+      where: {
+        platform: 'youtube',
+        OR: [
+          { analyzed: false },
+          { analyzed: true, newsItems: { none: {} }, stockRecs: { none: {} } },
+        ],
+      },
       orderBy: { publishedAt: 'desc' },
       take: 5,
     })
