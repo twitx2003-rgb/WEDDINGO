@@ -1,4 +1,5 @@
 {
+  "_v": "3",
   "buildCommand": "prisma db push --skip-generate && next build",
   "framework": "nextjs",
   "functions": {

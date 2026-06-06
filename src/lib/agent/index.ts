@@ -23,6 +23,9 @@ export async function runAgent(): Promise<void> {
   let stocksExtracted = 0
 
   try {
+    // Reset videos that were marked analyzed but have no extracted content
+    await db.$executeRaw`UPDATE "Video" SET analyzed = false WHERE platform = 'youtube' AND id NOT IN (SELECT DISTINCT "videoId" FROM "NewsItem") AND id NOT IN (SELECT DISTINCT "videoId" FROM "StockRecommendation")`
+
     // Step 2: Fetch recent YouTube videos
     const videos = await listRecentVideos(14)
     videosFound += videos.length
@@ -50,17 +53,11 @@ export async function runAgent(): Promise<void> {
       }
     }
 
-    // Step 3: Find videos to analyze — unanalyzed OR analyzed-but-empty (no news/stocks extracted yet)
+    // Step 3: Find unanalyzed videos (reset above ensures empty ones are included)
     const unanalyzed = await db.video.findMany({
-      where: {
-        platform: 'youtube',
-        OR: [
-          { analyzed: false },
-          { analyzed: true, newsItems: { none: {} }, stockRecs: { none: {} } },
-        ],
-      },
+      where: { analyzed: false, platform: 'youtube' },
       orderBy: { publishedAt: 'desc' },
-      take: 5,
+      take: 3,
     })
 
     const apiKey = await config.youtubeApiKey() ?? ''

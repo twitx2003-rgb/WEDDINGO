@@ -59,16 +59,23 @@ export function StockCard({
   const isPositive = changePercent >= 0
   const history = priceData?.history ?? []
 
+  const vsEntry =
+    currentPrice && priceAtTime
+      ? (((currentPrice - priceAtTime) / priceAtTime) * 100).toFixed(1)
+      : null
+
+  const cardVariant = action === 'buy' ? 'buy' : action === 'sell' ? 'bearish' : 'default'
+
   return (
-    <Card className="hover:border-white/20 transition-colors overflow-hidden">
+    <Card variant={cardVariant} className="hover:border-white/20 transition-colors overflow-hidden">
       {/* Chart */}
-      <div className="bg-white/3">
+      <div className="bg-white/[0.02]">
         {loading ? (
-          <Skeleton className="h-16 w-full rounded-none" />
+          <Skeleton className="h-24 w-full rounded-none" />
         ) : history.length > 0 ? (
-          <MiniChart data={history} isPositive={isPositive} />
+          <MiniChart data={history} isPositive={isPositive} entryPrice={priceAtTime} />
         ) : (
-          <div className="h-16 flex items-center justify-center text-xs text-gray-600">
+          <div className="h-24 flex items-center justify-center text-xs text-gray-600">
             No chart data
           </div>
         )}
@@ -78,38 +85,37 @@ export function StockCard({
         {/* Ticker + Action */}
         <div className="flex items-start justify-between">
           <div>
-            <span className="text-2xl font-bold text-white font-mono">{ticker}</span>
+            <span className="text-2xl font-bold text-white font-mono tracking-tight">{ticker}</span>
             <p className="text-xs text-gray-400 mt-0.5">{companyName}</p>
           </div>
-          <div className="flex flex-col items-end gap-1.5">
+          <div className="flex flex-col items-end gap-2">
             <Badge variant={action as StockAction} className="text-sm font-bold px-3 py-1">
               {action.toUpperCase()}
             </Badge>
-            <div className="flex gap-1">
-              {[...Array(10)].map((_, i) => (
+            <div className="w-20">
+              <div className="h-1 rounded-full bg-white/10">
                 <div
-                  key={i}
-                  className={`h-1 w-1.5 rounded-full ${
-                    i < confidence ? 'bg-blue-400' : 'bg-white/10'
-                  }`}
+                  className="h-1 rounded-full bg-blue-400 transition-all"
+                  style={{ width: `${confidence * 10}%` }}
                 />
-              ))}
+              </div>
+              <p className="text-[10px] text-gray-500 mt-0.5 text-right">{confidence}/10 conf</p>
             </div>
           </div>
         </div>
 
         {/* Price */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
           {loading ? (
             <Skeleton className="h-8 w-24" />
           ) : currentPrice ? (
             <>
-              <span className="text-xl font-semibold text-white">
+              <span className="text-2xl font-bold text-white font-mono tabular-nums">
                 ${currentPrice.toFixed(2)}
               </span>
               <span
-                className={`flex items-center gap-0.5 text-sm font-medium ${
-                  isPositive ? 'text-green-400' : 'text-red-400'
+                className={`flex items-center gap-0.5 text-sm font-semibold ${
+                  isPositive ? 'text-emerald-400' : 'text-red-400'
                 }`}
               >
                 {isPositive ? (
@@ -121,9 +127,18 @@ export function StockCard({
                 )}
                 {Math.abs(changePercent).toFixed(2)}%
               </span>
+              {vsEntry !== null && (
+                <span
+                  className={`text-xs font-mono ${
+                    parseFloat(vsEntry) >= 0 ? 'text-emerald-400/70' : 'text-red-400/70'
+                  }`}
+                >
+                  {parseFloat(vsEntry) >= 0 ? '+' : ''}{vsEntry}% vs entry
+                </span>
+              )}
               {targetPrice && (
-                <span className="text-xs text-gray-400">
-                  Target: <span className="text-white">${targetPrice}</span>
+                <span className="text-xs text-gray-400 ml-auto">
+                  Target: <span className="text-white font-mono">${targetPrice}</span>
                 </span>
               )}
             </>
@@ -148,7 +163,7 @@ export function StockCard({
           <span>{formatDistanceToNow(new Date(publishedAt), { addSuffix: true })}</span>
           <div className="flex items-center gap-2">
             {priceAtTime && (
-              <span>Was ${priceAtTime.toFixed(2)}</span>
+              <span className="font-mono">Entry ${priceAtTime.toFixed(2)}</span>
             )}
             {sourceUrl && (
               <a

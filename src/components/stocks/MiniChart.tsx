@@ -6,9 +6,10 @@ import type { HistoricalPoint } from '@/types'
 interface MiniChartProps {
   data: HistoricalPoint[]
   isPositive: boolean
+  entryPrice?: number | null
 }
 
-export function MiniChart({ data, isPositive }: MiniChartProps) {
+export function MiniChart({ data, isPositive, entryPrice }: MiniChartProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -19,7 +20,7 @@ export function MiniChart({ data, isPositive }: MiniChartProps) {
 
     const init = async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { createChart, ColorType } = await import('lightweight-charts') as any
+      const { createChart, ColorType, LineStyle } = await import('lightweight-charts') as any
       if (!containerRef.current) return
 
       chart = createChart(containerRef.current, {
@@ -37,13 +38,13 @@ export function MiniChart({ data, isPositive }: MiniChartProps) {
         handleScroll: false,
         handleScale: false,
         width: containerRef.current.clientWidth,
-        height: 64,
+        height: 96,
       })
 
       const color = isPositive ? '#22c55e' : '#ef4444'
-      const series = chart.addAreaSeries({
+      const areaSeries = chart.addAreaSeries({
         lineColor: color,
-        topColor: color + '33',
+        topColor: color + '55',
         bottomColor: 'transparent',
         lineWidth: 2,
         priceLineVisible: false,
@@ -51,12 +52,26 @@ export function MiniChart({ data, isPositive }: MiniChartProps) {
         crosshairMarkerVisible: false,
       })
 
-      series.setData(
-        data.map((d) => ({
-          time: d.date as `${number}-${number}-${number}`,
-          value: d.close,
-        }))
-      )
+      const chartData = data.map((d) => ({
+        time: d.date as `${number}-${number}-${number}`,
+        value: d.close,
+      }))
+
+      areaSeries.setData(chartData)
+
+      if (entryPrice != null && chartData.length > 0) {
+        const lineSeries = chart.addLineSeries({
+          color: 'rgba(148,163,184,0.4)',
+          lineWidth: 1,
+          lineStyle: LineStyle.Dashed,
+          priceLineVisible: false,
+          lastValueVisible: false,
+          crosshairMarkerVisible: false,
+        })
+        lineSeries.setData(
+          chartData.map((d) => ({ time: d.time, value: entryPrice }))
+        )
+      }
     }
 
     init()
@@ -64,7 +79,7 @@ export function MiniChart({ data, isPositive }: MiniChartProps) {
     return () => {
       if (chart) chart.remove()
     }
-  }, [data, isPositive])
+  }, [data, isPositive, entryPrice])
 
-  return <div ref={containerRef} className="w-full h-16" />
+  return <div ref={containerRef} className="w-full h-24" />
 }

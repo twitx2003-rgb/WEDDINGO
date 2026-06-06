@@ -1,8 +1,8 @@
 import { ExternalLink, Quote } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { Badge } from '@/components/ui/Badge'
-import { Card, CardBody } from '@/components/ui/Card'
-import type { Sentiment, NewsCategory } from '@/types'
+import { cn } from '@/lib/utils'
+import type { Sentiment } from '@/types'
 
 interface NewsCardProps {
   headline: string
@@ -18,12 +18,26 @@ interface NewsCardProps {
   platform?: string
 }
 
+const categoryStyles: Record<string, string> = {
+  earnings: 'bg-purple-500/20 text-purple-300 border border-purple-500/30',
+  market_move: 'bg-orange-500/20 text-orange-300 border border-orange-500/30',
+  sector: 'bg-teal-500/20 text-teal-300 border border-teal-500/30',
+  macro: 'bg-blue-500/20 text-blue-300 border border-blue-500/30',
+  general: 'bg-slate-500/20 text-slate-300 border border-slate-500/30',
+}
+
 const categoryLabels: Record<string, string> = {
   earnings: 'Earnings',
   market_move: 'Market Move',
   sector: 'Sector',
   macro: 'Macro',
   general: 'General',
+}
+
+const sentimentBorder: Record<string, string> = {
+  bullish: 'border-l-emerald-500',
+  bearish: 'border-l-red-500',
+  neutral: 'border-l-gray-600',
 }
 
 export function NewsCard({
@@ -35,7 +49,6 @@ export function NewsCard({
   quote,
   importance,
   publishedAt,
-  sourceTitle,
   sourceUrl,
   platform,
 }: NewsCardProps) {
@@ -49,17 +62,28 @@ export function NewsCard({
         }
       })()
 
+  const isHot = importance >= 8
+  const borderColor = sentimentBorder[sentiment] ?? 'border-l-gray-600'
+
   return (
-    <Card className="hover:border-white/20 transition-colors">
-      <CardBody className="space-y-3">
+    <div
+      className={cn(
+        'rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm',
+        'border-l-4',
+        borderColor,
+        'hover:border-white/20 hover:bg-white/[0.07] transition-all',
+        isHot && 'shadow-[0_0_12px_rgba(249,115,22,0.12)]'
+      )}
+    >
+      <div className="p-4 space-y-3">
         {/* Header row */}
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-semibold text-white leading-snug flex-1">{headline}</h3>
           <div className="flex items-center gap-1.5 shrink-0">
             <Badge variant={sentiment as Sentiment}>{sentiment}</Badge>
-            {importance >= 8 && (
-              <Badge className="bg-orange-500/20 text-orange-300 border border-orange-500/40">
-                🔥 Hot
+            {isHot && (
+              <Badge className="bg-orange-500/20 text-orange-300 border border-orange-500/40 shadow-[0_0_8px_rgba(249,115,22,0.3)]">
+                Hot
               </Badge>
             )}
           </div>
@@ -79,13 +103,21 @@ export function NewsCard({
         {/* Footer */}
         <div className="flex items-center justify-between gap-2 pt-1">
           <div className="flex flex-wrap gap-1.5 items-center">
-            <Badge className="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            <span
+              className={cn(
+                'text-xs px-2 py-0.5 rounded-full',
+                categoryStyles[category] ?? categoryStyles.general
+              )}
+            >
               {categoryLabels[category] ?? category}
-            </Badge>
+            </span>
             {parsedTickers.map((t) => (
-              <Badge key={t} className="bg-white/10 text-gray-200 font-mono text-xs">
+              <span
+                key={t}
+                className="text-xs px-2 py-0.5 rounded-full bg-white/10 text-gray-200 font-mono hover:bg-white/20 transition-colors cursor-default"
+              >
                 ${t}
-              </Badge>
+              </span>
             ))}
           </div>
 
@@ -104,7 +136,7 @@ export function NewsCard({
             )}
           </div>
         </div>
-      </CardBody>
-    </Card>
+      </div>
+    </div>
   )
 }

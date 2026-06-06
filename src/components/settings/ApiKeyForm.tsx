@@ -162,6 +162,36 @@ export function ApiKeyForm({ onSaved }: { onSaved: () => void }) {
           YouTube and Twitter/X are fully supported.
         </p>
       </div>
+
+      {/* GitHub Actions hourly cron */}
+      <div className="rounded-xl border border-white/10 bg-white/5 p-4 space-y-3">
+        <p className="text-sm font-semibold text-white">GitHub Actions — Hourly Cron</p>
+        <p className="text-xs text-gray-400 leading-relaxed">
+          To run the agent automatically every hour (even when the site is idle), add these 4
+          secrets to your GitHub repository:
+        </p>
+        <div className="space-y-1.5 font-mono text-xs">
+          {[
+            { name: 'DATABASE_URL', hint: 'Vercel → Storage → neon-cinnabar-lamp → .env.local' },
+            { name: 'YOUTUBE_API_KEY', hint: 'Google Cloud Console → Credentials' },
+            { name: 'MICAH_STOKES_CHANNEL_ID', hint: '@Micha.Stocks or UCxxxxxxx' },
+            { name: 'ANTHROPIC_API_KEY', hint: 'console.anthropic.com' },
+          ].map(({ name, hint }) => (
+            <div key={name} className="flex items-start gap-2">
+              <span className="text-emerald-400 shrink-0">{name}</span>
+              <span className="text-gray-600">— {hint}</span>
+            </div>
+          ))}
+        </div>
+        <a
+          href="https://github.com/twitx2003-rgb/weddingo/settings/secrets/actions/new"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors"
+        >
+          Open GitHub Secrets →
+        </a>
+      </div>
     </div>
   )
 }
