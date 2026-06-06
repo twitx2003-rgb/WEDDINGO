@@ -1,6 +1,5 @@
 {
-  "_v": "3",
-  "buildCommand": "prisma db push --skip-generate && next build",
+  "buildCommand": "prisma db push --skip-generate --accept-data-loss && next build",
   "framework": "nextjs",
   "functions": {
     "src/app/api/agent/trigger/route.ts": {
