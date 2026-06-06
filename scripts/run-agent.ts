@@ -1,6 +1,7 @@
 import { runAgent } from '../src/lib/agent'
 
-runAgent()
+// GitHub Actions has a 10-minute limit — process all pending videos in one run
+runAgent(20)
   .then(() => {
     console.log('[Agent] Completed successfully')
     process.exit(0)

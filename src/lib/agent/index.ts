@@ -7,8 +7,8 @@ import { fetchRecentTweets } from '../platforms/twitter'
 import { analyzeTranscript as analyzeTweets } from '../skills/analysis'
 import { setAgentRunning, setAgentIdle, setAgentError } from './state'
 
-export async function runAgent(): Promise<void> {
-  console.log('[Agent] Starting run...')
+export async function runAgent(maxVideos = 3): Promise<void> {
+  console.log(`[Agent] Starting run (max ${maxVideos} videos)...`)
 
   // Create AgentRun record
   const run = await db.agentRun.create({
@@ -57,7 +57,7 @@ export async function runAgent(): Promise<void> {
     const unanalyzed = await db.video.findMany({
       where: { analyzed: false, platform: 'youtube' },
       orderBy: { publishedAt: 'desc' },
-      take: 3,
+      take: maxVideos,
     })
 
     const apiKey = await config.youtubeApiKey() ?? ''
