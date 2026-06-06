@@ -64,9 +64,9 @@ export async function runAgent(): Promise<void> {
 
     for (const video of unanalyzed) {
       const transcript = await fetchTranscript(video.externalId)
-      const content = transcript
-        ?? video.description
-        ?? await getVideoDescription(video.externalId, apiKey)
+      // Always fetch the full description from the API — the stored snippet is too short
+      const fullDescription = await getVideoDescription(video.externalId, apiKey)
+      const content = transcript ?? fullDescription ?? video.description
 
       if (!content || content.trim().length < 50) {
         console.log(`[Agent] Skipping ${video.title} — no content`)
