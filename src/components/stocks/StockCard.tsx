@@ -71,7 +71,7 @@ export function StockCard({
   const cardVariant = action === 'buy' ? 'buy' : action === 'sell' ? 'bearish' : 'default'
 
   return (
-    <Card variant={cardVariant} className="hover:border-white/20 transition-colors overflow-hidden">
+    <Card variant={cardVariant} className="reveal hover:border-white/20 overflow-hidden">
       {/* Chart */}
       <div className="bg-white/[0.02]">
         {loading ? (

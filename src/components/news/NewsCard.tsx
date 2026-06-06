@@ -68,11 +68,11 @@ export function NewsCard({
   return (
     <div
       className={cn(
-        'rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm',
-        'border-l-4',
+        'reveal card-lift rounded-xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-sm',
+        'border-l-[3px]',
         borderColor,
-        'hover:border-white/20 hover:bg-white/[0.07] transition-all',
-        isHot && 'shadow-[0_0_12px_rgba(249,115,22,0.12)]'
+        'hover:border-white/15 hover:bg-white/[0.05]',
+        isHot && 'shadow-[0_0_16px_rgba(249,115,22,0.15)]'
       )}
     >
       <div className="p-4 space-y-3">

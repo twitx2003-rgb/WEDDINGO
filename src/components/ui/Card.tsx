@@ -10,9 +10,9 @@ export function Card({ children, className, variant = 'default' }: CardProps) {
   return (
     <div
       className={cn(
-        'rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm',
-        variant === 'buy' && 'border-l-4 border-l-emerald-500/70 ring-1 ring-emerald-500/10',
-        variant === 'bearish' && 'border-l-4 border-l-red-500/70',
+        'card-lift rounded-xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-sm',
+        variant === 'buy' && 'border-l-[3px] border-l-emerald-500/80 ring-1 ring-emerald-500/10',
+        variant === 'bearish' && 'border-l-[3px] border-l-red-500/80',
         className
       )}
     >
