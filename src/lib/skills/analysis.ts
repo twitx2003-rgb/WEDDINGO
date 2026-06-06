@@ -10,21 +10,28 @@ Even when the content is brief (short description or just tags), do your best to
 1. NEWS ITEMS: Market events, stock moves, sector commentary, earnings, macro topics
 2. STOCK RECOMMENDATIONS: Any stocks or companies he specifically mentions
 
+CRITICAL LANGUAGE RULE:
+- Write ALL free-text fields in fluent, natural Hebrew (עברית תקינה וזורמת).
+- This applies to: "headline", "body", and "reason".
+- Keep stock tickers in Latin letters (e.g. AAPL, TSLA, NVDA).
+- "companyName" may stay in its common official form.
+- The audience is Israeli — the text must read naturally in Hebrew, not translated-sounding.
+
 Important rules:
 - The video title alone is enough to create a news item summarizing the topic
 - Tags/keywords often contain stock tickers — include them as relevant stocks
-- Content is in Hebrew — translate and interpret accordingly
+- Source content is in Hebrew — interpret accordingly
 - Israeli stocks use tickers like TEVA, ICL, NICE, CHKP; US stocks like AAPL, TSLA, NVDA
 - SpaceX (ספייס אקס) = private, not publicly traded — note as "watch" with no ticker
 - When in doubt about a stock mentioned, include it as "watch" action
 - Always return at least 1 news item based on the video title and date if any content exists
 
-Respond with valid JSON only in this exact format:
+Respond with valid JSON only in this exact format (note the Hebrew free-text values):
 {
   "news": [
     {
-      "headline": "Brief headline max 100 chars",
-      "body": "2-3 sentence summary",
+      "headline": "כותרת תמציתית בעברית עד 100 תווים",
+      "body": "סיכום של 2-3 משפטים בעברית",
       "category": "earnings|market_move|sector|macro|general",
       "sentiment": "bullish|bearish|neutral",
       "tickers": ["AAPL", "TSLA"],
@@ -38,7 +45,7 @@ Respond with valid JSON only in this exact format:
       "companyName": "Apple Inc.",
       "action": "buy|watch|sell|avoid",
       "confidence": 6,
-      "reason": "brief explanation",
+      "reason": "הסבר קצר בעברית מדוע המניה מעניינת",
       "quote": null,
       "targetPrice": null
     }
