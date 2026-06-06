@@ -104,7 +104,13 @@ export async function getVideoDescription(videoId: string, apiKey: string): Prom
     const res = await fetch(url.toString())
     if (!res.ok) return ''
     const data = await res.json()
-    return data.items?.[0]?.snippet?.description ?? ''
+    const snippet = data.items?.[0]?.snippet
+    if (!snippet) return ''
+    const description = snippet.description ?? ''
+    const tags: string[] = snippet.tags ?? []
+    // Combine description + tags so Claude has stock tickers and keywords even when description is sparse
+    const tagLine = tags.length > 0 ? `\nKeywords/Tags: ${tags.join(', ')}` : ''
+    return `${description}${tagLine}`.trim()
   } catch {
     return ''
   }
