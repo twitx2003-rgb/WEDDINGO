@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { TrendingUp } from 'lucide-react'
+import { tradingViewUrl } from '@/lib/utils'
 
 interface TickerItem {
   ticker: string
@@ -35,8 +36,17 @@ export function TickerStrip() {
       <div className="flex-1 overflow-hidden" dir="ltr">
         <div className="flex animate-marquee gap-8 whitespace-nowrap">
           {list.map((item, i) => (
-            <span key={i} className="inline-flex items-center gap-2 text-xs">
-              <span className="font-mono font-bold text-emerald-400">{item.ticker}</span>
+            <a
+              key={i}
+              href={tradingViewUrl(item.ticker)}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={`פתח את הגרף של ${item.ticker} ב-TradingView`}
+              className="inline-flex items-center gap-2 text-xs group"
+            >
+              <span className="font-mono font-bold text-emerald-400 group-hover:text-emerald-300 group-hover:underline">
+                {item.ticker}
+              </span>
               {item.price != null && (
                 <span className="text-gray-400 font-mono tabular-nums">
                   ${item.price.toFixed(2)}
@@ -48,7 +58,7 @@ export function TickerStrip() {
                 </span>
               )}
               <span className="text-gray-700">·</span>
-            </span>
+            </a>
           ))}
         </div>
       </div>

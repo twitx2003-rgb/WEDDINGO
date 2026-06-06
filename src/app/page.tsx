@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { getConfigStatus } from '@/lib/env'
 import { Card, CardBody } from '@/components/ui/Card'
 import { CountUp } from '@/components/ui/CountUp'
+import { tradingViewUrl } from '@/lib/utils'
 import { formatDistanceToNow } from 'date-fns'
 import { he } from 'date-fns/locale'
 
@@ -200,7 +201,16 @@ export default async function HomePage() {
               >
                 <div className="p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xl font-bold text-white font-mono tracking-tight">{s.ticker}</span>
+                    <a
+                      href={tradingViewUrl(s.ticker, s.exchange)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      dir="ltr"
+                      title={`פתח את הגרף של ${s.ticker} ב-TradingView`}
+                      className="text-xl font-bold text-white font-mono tracking-tight hover:text-blue-400 transition-colors"
+                    >
+                      {s.ticker}
+                    </a>
                     <span
                       className={`text-[11px] font-bold px-2.5 py-1 rounded-full ${
                         s.action === 'buy'

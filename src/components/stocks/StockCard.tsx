@@ -8,6 +8,7 @@ import { he } from 'date-fns/locale'
 import { Badge } from '@/components/ui/Badge'
 import { Card, CardBody } from '@/components/ui/Card'
 import { Skeleton } from '@/components/ui/Skeleton'
+import { tradingViewUrl } from '@/lib/utils'
 import type { StockQuote, HistoricalPoint, StockAction } from '@/types'
 
 const MiniChart = dynamic(() => import('./MiniChart').then((m) => m.MiniChart), { ssr: false })
@@ -98,7 +99,16 @@ export function StockCard({
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="text-2xl font-bold text-white font-mono tracking-tight" dir="ltr">{ticker}</span>
+              <a
+                href={tradingViewUrl(ticker, exchange)}
+                target="_blank"
+                rel="noopener noreferrer"
+                dir="ltr"
+                title={`פתח את הגרף של ${ticker} ב-TradingView`}
+                className="text-2xl font-bold text-white font-mono tracking-tight hover:text-blue-400 transition-colors"
+              >
+                {ticker}
+              </a>
               {verified && (
                 <span
                   title={exchange ? `מאומת בבורסת ${exchange}` : 'טיקר מאומת'}

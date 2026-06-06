@@ -2,7 +2,7 @@ import { ExternalLink, Quote } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { he } from 'date-fns/locale'
 import { Badge } from '@/components/ui/Badge'
-import { cn } from '@/lib/utils'
+import { cn, tradingViewUrl } from '@/lib/utils'
 import type { Sentiment } from '@/types'
 
 interface NewsCardProps {
@@ -119,13 +119,17 @@ export function NewsCard({
               {categoryLabels[category] ?? category}
             </span>
             {parsedTickers.map((t) => (
-              <span
+              <a
                 key={t}
+                href={tradingViewUrl(t)}
+                target="_blank"
+                rel="noopener noreferrer"
                 dir="ltr"
-                className="text-xs px-2 py-0.5 rounded-full bg-white/10 text-gray-200 font-mono hover:bg-white/20 transition-colors cursor-default"
+                title={`פתח את הגרף של ${t} ב-TradingView`}
+                className="text-xs px-2 py-0.5 rounded-full bg-white/10 text-gray-200 font-mono hover:bg-blue-500/20 hover:text-blue-300 transition-colors"
               >
                 ${t}
-              </span>
+              </a>
             ))}
           </div>
 
