@@ -67,6 +67,21 @@ Test the stock price skill for a specific ticker.
 npx tsx scripts/fetch-stock-price.ts <TICKER>
 ```
 
+### /verify-stock
+
+Verify and analyze a stock the way the agent does: confirm the ticker exists
+on Yahoo Finance (correcting wrong tickers by company-name search), flag
+non-tradeable mentions (e.g. private companies), then pull live price, 30-day
+history, and compute the recent trend.
+
+```bash
+npx tsx scripts/verify-stock.ts <TICKER> [companyName]
+```
+
+Skill source: `src/lib/skills/stockVerification.ts` (`verifyStock`, `analyzeStock`).
+The agent calls `analyzeStock` for every extracted pick and **skips unverified
+tickers** so hallucinated symbols never reach the database.
+
 ## Notes
 
 - Instagram/TikTok cannot be tracked via API (platform restrictions).

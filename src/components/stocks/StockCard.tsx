@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { ExternalLink, TrendingUp, TrendingDown, Minus, Quote } from 'lucide-react'
+import { ExternalLink, TrendingUp, TrendingDown, Minus, Quote, BadgeCheck } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { Badge } from '@/components/ui/Badge'
 import { Card, CardBody } from '@/components/ui/Card'
@@ -20,6 +20,8 @@ interface StockCardProps {
   quote?: string | null
   priceAtTime?: number | null
   targetPrice?: number | null
+  verified?: boolean
+  exchange?: string | null
   publishedAt: string | Date
   sourceTitle?: string
   sourceUrl?: string
@@ -35,6 +37,8 @@ export function StockCard({
   quote,
   priceAtTime,
   targetPrice,
+  verified,
+  exchange,
   publishedAt,
   sourceTitle,
   sourceUrl,
@@ -85,8 +89,21 @@ export function StockCard({
         {/* Ticker + Action */}
         <div className="flex items-start justify-between">
           <div>
-            <span className="text-2xl font-bold text-white font-mono tracking-tight">{ticker}</span>
-            <p className="text-xs text-gray-400 mt-0.5">{companyName}</p>
+            <div className="flex items-center gap-1.5">
+              <span className="text-2xl font-bold text-white font-mono tracking-tight">{ticker}</span>
+              {verified && (
+                <span
+                  title={exchange ? `Verified on ${exchange}` : 'Verified ticker'}
+                  className="inline-flex items-center"
+                >
+                  <BadgeCheck className="h-4 w-4 text-blue-400" />
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-gray-400 mt-0.5">
+              {companyName}
+              {exchange && <span className="text-gray-600"> · {exchange}</span>}
+            </p>
           </div>
           <div className="flex flex-col items-end gap-2">
             <Badge variant={action as StockAction} className="text-sm font-bold px-3 py-1">

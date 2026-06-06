@@ -84,6 +84,8 @@ export function StockGrid() {
                 quote?: string
                 priceAtTime?: number
                 targetPrice?: number
+                verified?: boolean
+                exchange?: string
                 publishedAt: string
                 video?: { url: string; platform: string; title: string }
               }) => (
@@ -97,6 +99,8 @@ export function StockGrid() {
                   quote={stock.quote}
                   priceAtTime={stock.priceAtTime}
                   targetPrice={stock.targetPrice}
+                  verified={stock.verified}
+                  exchange={stock.exchange}
                   publishedAt={stock.publishedAt}
                   sourceTitle={stock.video?.title}
                   sourceUrl={stock.video?.url}

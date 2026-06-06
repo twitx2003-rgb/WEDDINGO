@@ -64,6 +64,8 @@ model StockRecommendation {
   quote       String?
   priceAtTime Float?
   targetPrice Float?
+  verified    Boolean  @default(false)
+  exchange    String?
   publishedAt DateTime
   createdAt   DateTime @default(now())
 

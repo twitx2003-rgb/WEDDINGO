@@ -41,6 +41,8 @@ export interface StockRecommendationRecord {
   quote: string | null
   priceAtTime: number | null
   targetPrice: number | null
+  verified: boolean
+  exchange: string | null
   publishedAt: Date
   video?: VideoRecord
 }

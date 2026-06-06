@@ -2,7 +2,7 @@ import { db } from '../db'
 import { listRecentVideos, fetchTranscript, getVideoDescription } from '../skills/youtube'
 import { config } from '../env'
 import { analyzeTranscript } from '../skills/analysis'
-import { getQuote } from '../skills/stockPrice'
+import { analyzeStock } from '../skills/stockVerification'
 import { fetchRecentTweets } from '../platforms/twitter'
 import { analyzeTranscript as analyzeTweets } from '../skills/analysis'
 import { setAgentRunning, setAgentIdle, setAgentError } from './state'
@@ -100,20 +100,27 @@ export async function runAgent(maxVideos = 3): Promise<void> {
         newsExtracted++
       }
 
-      // Step 5: Store stock picks + fetch current price
+      // Step 5: Verify + analyze each stock, then store (skips hallucinated tickers)
       for (const stock of result.stocks) {
-        const quote = await getQuote(stock.ticker)
+        const analysis = await analyzeStock(stock.ticker, stock.companyName)
+        if (!analysis.verification.verified) {
+          console.log(`[Agent] Skipping unverified stock ${stock.ticker} — ${analysis.verification.note}`)
+          continue
+        }
+        const v = analysis.verification
         await db.stockRecommendation.create({
           data: {
             videoId: video.id,
-            ticker: stock.ticker.toUpperCase(),
-            companyName: stock.companyName,
+            ticker: v.ticker,
+            companyName: v.companyName,
             action: stock.action,
             confidence: stock.confidence,
             reason: stock.reason,
             quote: stock.quote ?? null,
-            priceAtTime: quote?.price ?? null,
+            priceAtTime: analysis.quote?.price ?? null,
             targetPrice: stock.targetPrice ?? null,
+            verified: true,
+            exchange: v.exchange,
             publishedAt: video.publishedAt,
           },
         })
@@ -188,18 +195,25 @@ export async function runAgent(maxVideos = 3): Promise<void> {
         }
 
         for (const stock of tweetResult.stocks) {
-          const quote = await getQuote(stock.ticker)
+          const analysis = await analyzeStock(stock.ticker, stock.companyName)
+          if (!analysis.verification.verified) {
+            console.log(`[Agent] Skipping unverified stock ${stock.ticker} — ${analysis.verification.note}`)
+            continue
+          }
+          const v = analysis.verification
           await db.stockRecommendation.create({
             data: {
               videoId: twitterBatch.id,
-              ticker: stock.ticker.toUpperCase(),
-              companyName: stock.companyName,
+              ticker: v.ticker,
+              companyName: v.companyName,
               action: stock.action,
               confidence: stock.confidence,
               reason: stock.reason,
               quote: stock.quote ?? null,
-              priceAtTime: quote?.price ?? null,
+              priceAtTime: analysis.quote?.price ?? null,
               targetPrice: stock.targetPrice ?? null,
+              verified: true,
+              exchange: v.exchange,
               publishedAt: new Date(),
             },
           })
