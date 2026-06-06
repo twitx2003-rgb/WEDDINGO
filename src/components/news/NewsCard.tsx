@@ -1,5 +1,6 @@
 import { ExternalLink, Quote } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
+import { he } from 'date-fns/locale'
 import { Badge } from '@/components/ui/Badge'
 import { cn } from '@/lib/utils'
 import type { Sentiment } from '@/types'
@@ -27,11 +28,17 @@ const categoryStyles: Record<string, string> = {
 }
 
 const categoryLabels: Record<string, string> = {
-  earnings: 'Earnings',
-  market_move: 'Market Move',
-  sector: 'Sector',
-  macro: 'Macro',
-  general: 'General',
+  earnings: 'דוחות',
+  market_move: 'תנועת שוק',
+  sector: 'סקטור',
+  macro: 'מאקרו',
+  general: 'כללי',
+}
+
+const sentimentLabels: Record<string, string> = {
+  bullish: 'חיובי',
+  bearish: 'שלילי',
+  neutral: 'ניטרלי',
 }
 
 const sentimentBorder: Record<string, string> = {
@@ -80,10 +87,10 @@ export function NewsCard({
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-semibold text-white leading-snug flex-1">{headline}</h3>
           <div className="flex items-center gap-1.5 shrink-0">
-            <Badge variant={sentiment as Sentiment}>{sentiment}</Badge>
+            <Badge variant={sentiment as Sentiment}>{sentimentLabels[sentiment] ?? sentiment}</Badge>
             {isHot && (
               <Badge className="bg-orange-500/20 text-orange-300 border border-orange-500/40 shadow-[0_0_8px_rgba(249,115,22,0.3)]">
-                Hot
+                חם
               </Badge>
             )}
           </div>
@@ -114,6 +121,7 @@ export function NewsCard({
             {parsedTickers.map((t) => (
               <span
                 key={t}
+                dir="ltr"
                 className="text-xs px-2 py-0.5 rounded-full bg-white/10 text-gray-200 font-mono hover:bg-white/20 transition-colors cursor-default"
               >
                 ${t}
@@ -122,7 +130,7 @@ export function NewsCard({
           </div>
 
           <div className="flex items-center gap-3 text-xs text-gray-500 shrink-0">
-            <span>{formatDistanceToNow(new Date(publishedAt), { addSuffix: true })}</span>
+            <span>{formatDistanceToNow(new Date(publishedAt), { addSuffix: true, locale: he })}</span>
             {sourceUrl && (
               <a
                 href={sourceUrl}

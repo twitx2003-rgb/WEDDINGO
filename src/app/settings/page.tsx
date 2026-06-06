@@ -35,15 +35,15 @@ export default function SettingsPage() {
           <Settings className="h-6 w-6 text-gray-300" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white">Settings</h1>
-          <p className="text-sm text-gray-400">Configure API keys and agent behaviour</p>
+          <h1 className="text-2xl font-bold text-white">הגדרות</h1>
+          <p className="text-sm text-gray-400">הגדרת מפתחות API והתנהגות הסוכן</p>
         </div>
       </div>
 
       {status && (
         <Card>
           <CardHeader>
-            <h2 className="font-semibold text-white">Integration Status</h2>
+            <h2 className="font-semibold text-white">סטטוס חיבורים</h2>
           </CardHeader>
           <CardBody>
             <SetupChecklist status={status} />
@@ -53,8 +53,8 @@ export default function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <h2 className="font-semibold text-white">API Keys</h2>
-          <p className="text-xs text-gray-400 mt-0.5">Keys are stored securely in the local database</p>
+          <h2 className="font-semibold text-white">מפתחות API</h2>
+          <p className="text-xs text-gray-400 mt-0.5">המפתחות נשמרים באופן מאובטח במסד הנתונים</p>
         </CardHeader>
         <CardBody>
           <ApiKeyForm onSaved={refresh} />
@@ -63,13 +63,13 @@ export default function SettingsPage() {
 
       <Card>
         <CardBody>
-          <h3 className="font-medium text-white mb-2">About the Agent</h3>
+          <h3 className="font-medium text-white mb-2">אודות הסוכן</h3>
           <ul className="space-y-1.5 text-sm text-gray-400">
-            <li>• Runs automatically every hour when the server is running</li>
-            <li>• Checks YouTube for new videos and live stream replays by Micah Stokes</li>
-            <li>• Uses Claude AI to extract market news and stock recommendations</li>
-            <li>• Fetches live stock prices from Yahoo Finance (no key required)</li>
-            <li>• Instagram and TikTok cannot be tracked due to API restrictions</li>
+            <li>• רץ אוטומטית כל שעה (דרך GitHub Actions, 24/7)</li>
+            <li>• סורק את יוטיוב לסרטונים חדשים ושידורים חוזרים של מיקה סטוקס</li>
+            <li>• משתמש בבינה מלאכותית Claude לחילוץ חדשות שוק והמלצות מניות</li>
+            <li>• מאמת כל טיקר ומושך מחירים חיים מ-Yahoo Finance (ללא צורך במפתח)</li>
+            <li>• אינסטגרם וטיקטוק לא ניתנים למעקב עקב הגבלות API</li>
           </ul>
         </CardBody>
       </Card>

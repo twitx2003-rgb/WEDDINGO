@@ -10,8 +10,8 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Micah Tracker — Stock Market Intelligence',
-  description: 'Track Micah Stokes across all platforms and get AI-powered stock insights',
+  title: 'מעקב מיקה סטוקס — אינטליגנציית שוק ההון',
+  description: 'מעקב אחרי מיקה סטוקס בכל הפלטפורמות וניתוח מניות מבוסס בינה מלאכותית',
 }
 
 export default function RootLayout({
@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`h-full ${inter.variable}`}>
+    <html lang="he" dir="rtl" className={`h-full ${inter.variable}`}>
       <body className="min-h-full text-white antialiased">
         <Navbar />
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">{children}</main>

@@ -2,7 +2,7 @@ import { TrendingUp } from 'lucide-react'
 import { StockGrid } from '@/components/stocks/StockGrid'
 
 export const metadata = {
-  title: 'Stock Picks — Micah Tracker',
+  title: 'המלצות מניות — מעקב מיקה סטוקס',
 }
 
 export default function StocksPage() {
@@ -13,8 +13,8 @@ export default function StocksPage() {
           <TrendingUp className="h-6 w-6 text-emerald-400" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">Stock Picks</h1>
-          <p className="text-sm text-gray-400">Verified investment ideas from Micah&apos;s analysis</p>
+          <h1 className="text-2xl font-bold tracking-tight text-white">המלצות מניות</h1>
+          <p className="text-sm text-gray-400">רעיונות השקעה מאומתים מהניתוח של מיקה</p>
         </div>
       </div>
       <StockGrid />

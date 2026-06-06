@@ -13,33 +13,33 @@ interface FieldConfig {
 const fields: FieldConfig[] = [
   {
     key: 'YOUTUBE_API_KEY',
-    label: 'YouTube Data API v3 Key',
+    label: 'מפתח YouTube Data API v3',
     placeholder: 'AIzaSy...',
-    hint: 'From Google Cloud Console → APIs & Services → Credentials',
+    hint: 'מתוך Google Cloud Console ← APIs & Services ← Credentials',
   },
   {
     key: 'MICAH_STOKES_CHANNEL_ID',
-    label: 'Micah Stokes Channel ID',
-    placeholder: 'UCxxxxxxxxxxxxxxxx or paste YouTube URL',
-    hint: 'Paste the full YouTube channel URL and we\'ll extract the ID',
+    label: 'מזהה ערוץ מיקה סטוקס',
+    placeholder: 'UCxxxxxxxxxxxxxxxx או הדבק כתובת יוטיוב',
+    hint: 'הדבק את כתובת הערוץ המלאה ואנחנו נחלץ את המזהה',
   },
   {
     key: 'ANTHROPIC_API_KEY',
-    label: 'Anthropic / Claude API Key',
+    label: 'מפתח Anthropic / Claude API',
     placeholder: 'sk-ant-...',
-    hint: 'From console.anthropic.com → API Keys',
+    hint: 'מתוך console.anthropic.com ← API Keys',
   },
   {
     key: 'TWITTER_BEARER_TOKEN',
-    label: 'Twitter/X Bearer Token (optional)',
+    label: 'Twitter/X Bearer Token (אופציונלי)',
     placeholder: 'AAAA...',
-    hint: 'From developer.twitter.com → Your App → Keys and Tokens',
+    hint: 'מתוך developer.twitter.com ← האפליקציה שלך ← Keys and Tokens',
   },
   {
     key: 'MICAH_STOKES_TWITTER_ID',
-    label: 'Micah Stokes Twitter User ID (optional)',
+    label: 'מזהה משתמש Twitter של מיקה (אופציונלי)',
     placeholder: '12345678',
-    hint: 'Numeric Twitter user ID (not the handle). Use tweeterid.com to look it up.',
+    hint: 'מזהה משתמש מספרי (לא השם). אפשר למצוא ב-tweeterid.com',
   },
 ]
 
@@ -134,7 +134,7 @@ export function ApiKeyForm({ onSaved }: { onSaved: () => void }) {
           ) : (
             <Save className="h-4 w-4" />
           )}
-          {saving ? 'Saving...' : saveState === 'success' ? 'Saved!' : 'Save Settings'}
+          {saving ? 'שומר...' : saveState === 'success' ? 'נשמר!' : 'שמור הגדרות'}
         </button>
 
         <button
@@ -148,27 +148,27 @@ export function ApiKeyForm({ onSaved }: { onSaved: () => void }) {
             <Play className="h-4 w-4" />
           )}
           {triggering
-            ? 'Starting...'
+            ? 'מפעיל...'
             : triggerState === 'success'
-              ? 'Agent running!'
-              : 'Run Agent Now'}
+              ? 'הסוכן פועל!'
+              : 'הפעל סוכן עכשיו'}
         </button>
       </div>
 
       <div className="rounded-lg border border-orange-500/30 bg-orange-500/10 p-3 text-xs text-orange-300 space-y-1">
-        <p className="font-medium">Instagram & TikTok</p>
+        <p className="font-medium">אינסטגרם וטיקטוק</p>
         <p className="text-orange-400/80">
-          These platforms restrict third-party API access and cannot be automatically tracked.
-          YouTube and Twitter/X are fully supported.
+          הפלטפורמות האלו מגבילות גישת API של צד שלישי ולא ניתנות למעקב אוטומטי.
+          יוטיוב ו-Twitter/X נתמכים במלואם.
         </p>
       </div>
 
       {/* GitHub Actions hourly cron */}
       <div className="rounded-xl border border-white/10 bg-white/5 p-4 space-y-3">
-        <p className="text-sm font-semibold text-white">GitHub Actions — Hourly Cron</p>
+        <p className="text-sm font-semibold text-white">GitHub Actions — הרצה שעתית</p>
         <p className="text-xs text-gray-400 leading-relaxed">
-          To run the agent automatically every hour (even when the site is idle), add these 4
-          secrets to your GitHub repository:
+          כדי שהסוכן ירוץ אוטומטית כל שעה (גם כשהאתר לא פעיל), הוסף את 4 ה-secrets האלו
+          למאגר ה-GitHub שלך:
         </p>
         <div className="space-y-1.5 font-mono text-xs">
           {[
@@ -189,7 +189,7 @@ export function ApiKeyForm({ onSaved }: { onSaved: () => void }) {
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors"
         >
-          Open GitHub Secrets →
+          פתח את GitHub Secrets ←
         </a>
       </div>
     </div>

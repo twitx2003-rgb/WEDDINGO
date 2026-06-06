@@ -14,13 +14,13 @@ export function Navbar() {
                 <span className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 shadow-[0_0_18px_-2px_rgba(37,99,235,0.7)] transition-transform group-hover:scale-105">
                   <Activity className="h-[18px] w-[18px] text-white" strokeWidth={2.5} />
                 </span>
-                <span className="font-semibold text-[15px] tracking-tight text-white">
+                <span className="font-semibold text-[15px] tracking-tight text-white" dir="ltr">
                   Micah<span className="text-blue-400">Tracker</span>
                 </span>
               </Link>
               <div className="flex items-center gap-1">
-                <NavLink href="/news" icon={Newspaper}>News</NavLink>
-                <NavLink href="/stocks" icon={TrendingUp}>Stocks</NavLink>
+                <NavLink href="/news" icon={Newspaper}>חדשות</NavLink>
+                <NavLink href="/stocks" icon={TrendingUp}>מניות</NavLink>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -28,7 +28,7 @@ export function Navbar() {
               <Link
                 href="/settings"
                 className="rounded-lg p-2 text-gray-400 hover:text-white hover:bg-white/[0.06] transition-colors"
-                title="Settings"
+                title="הגדרות"
               >
                 <Settings className="h-5 w-5" />
               </Link>

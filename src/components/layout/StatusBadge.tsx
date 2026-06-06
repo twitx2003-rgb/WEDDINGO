@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { formatDistanceToNow } from 'date-fns'
+import { he } from 'date-fns/locale'
 import { Activity, AlertCircle, Clock } from 'lucide-react'
 
 interface StatusData {
@@ -35,20 +36,20 @@ export function StatusBadge() {
       {isRunning ? (
         <>
           <Activity className="h-3 w-3 text-blue-400 animate-pulse" />
-          <span className="text-blue-400">Agent running...</span>
+          <span className="text-blue-400">הסוכן פועל...</span>
         </>
       ) : status.lastRun?.status === 'error' ? (
         <>
           <AlertCircle className="h-3 w-3 text-red-400" />
-          <span className="text-red-400">Agent error</span>
+          <span className="text-red-400">שגיאת סוכן</span>
         </>
       ) : (
         <>
           <Clock className="h-3 w-3" />
           <span>
             {lastFinished
-              ? `Updated ${formatDistanceToNow(new Date(lastFinished), { addSuffix: true })}`
-              : 'Not yet run'}
+              ? `עודכן ${formatDistanceToNow(new Date(lastFinished), { addSuffix: true, locale: he })}`
+              : 'טרם הופעל'}
           </span>
         </>
       )}

@@ -1,10 +1,11 @@
 import Link from 'next/link'
-import { Newspaper, TrendingUp, Video, Activity, Settings, ArrowRight } from 'lucide-react'
+import { Newspaper, TrendingUp, Video, Activity, Settings, ArrowLeft } from 'lucide-react'
 import { db } from '@/lib/db'
 import { getConfigStatus } from '@/lib/env'
 import { Card, CardBody } from '@/components/ui/Card'
 import { CountUp } from '@/components/ui/CountUp'
 import { formatDistanceToNow } from 'date-fns'
+import { he } from 'date-fns/locale'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,7 +35,7 @@ export default async function HomePage() {
 
   const isReady = configStatus.youtube && configStatus.channelId && configStatus.claude
   const lastRunAgo = lastRun?.finishedAt
-    ? formatDistanceToNow(new Date(lastRun.finishedAt), { addSuffix: true })
+    ? formatDistanceToNow(new Date(lastRun.finishedAt), { addSuffix: true, locale: he })
     : null
 
   return (
@@ -42,9 +43,9 @@ export default async function HomePage() {
       {!isReady && (
         <div className="reveal rounded-xl border border-amber-500/30 bg-amber-500/[0.08] p-4 flex items-center justify-between gap-4">
           <div>
-            <p className="font-semibold text-amber-300">Setup required</p>
+            <p className="font-semibold text-amber-300">נדרשת הגדרה</p>
             <p className="text-sm text-amber-400/80 mt-0.5">
-              Configure your API keys to start tracking Micah Stokes
+              הגדר את מפתחות ה-API כדי להתחיל לעקוב אחרי מיקה סטוקס
             </p>
           </div>
           <Link
@@ -52,7 +53,7 @@ export default async function HomePage() {
             className="flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-black hover:bg-amber-400 transition-colors shrink-0"
           >
             <Settings className="h-4 w-4" />
-            Configure
+            הגדרה
           </Link>
         </div>
       )}
@@ -65,19 +66,19 @@ export default async function HomePage() {
             <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400"></span>
           </span>
           <span className="text-xs font-medium uppercase tracking-[0.2em] text-gray-400">
-            Live Market Intelligence
+            אינטליגנציית שוק בזמן אמת
           </span>
         </div>
         <h1 className="reveal delay-1 text-5xl sm:text-6xl font-bold tracking-tight leading-[1.05]">
-          <span className="text-gradient">Micah Stokes</span>
+          <span className="text-gradient" dir="ltr">Micah Stokes</span>
           <br />
-          <span className="text-white/90 text-4xl sm:text-5xl">Market Intelligence</span>
+          <span className="text-white/90 text-4xl sm:text-5xl">אינטליגנציית שוק ההון</span>
         </h1>
         <p className="reveal delay-2 text-gray-400 mt-5 text-base max-w-xl leading-relaxed">
-          AI-extracted stock picks and market news from every video — each ticker
-          automatically verified against live market data.
+          המלצות מניות וחדשות שוק שחולצו בבינה מלאכותית מכל סרטון — כל טיקר מאומת
+          אוטומטית מול נתוני שוק חיים.
           {lastRunAgo && (
-            <span className="block mt-1 text-sm text-gray-600">Last updated {lastRunAgo}</span>
+            <span className="block mt-1 text-sm text-gray-600">עודכן {lastRunAgo}</span>
           )}
         </p>
       </div>
@@ -86,29 +87,29 @@ export default async function HomePage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <StatCard
           icon={Video}
-          label="Videos tracked"
+          label="סרטונים במעקב"
           value={totalVideos}
           accent="blue"
           delay="delay-1"
         />
         <StatCard
           icon={Newspaper}
-          label="News today"
+          label="חדשות היום"
           value={newsToday}
           accent="emerald"
           delay="delay-2"
         />
         <StatCard
           icon={TrendingUp}
-          label="Stock picks (7d)"
+          label="המלצות (7 ימים)"
           value={stocksWeek}
           accent="violet"
           delay="delay-3"
         />
         <StatCard
           icon={Activity}
-          label="Agent status"
-          textValue={lastRun?.status ?? 'Never run'}
+          label="סטטוס הסוכן"
+          textValue={statusLabel(lastRun?.status)}
           accent="amber"
           delay="delay-4"
         />
@@ -117,19 +118,19 @@ export default async function HomePage() {
       {/* Latest News */}
       <section>
         <div className="reveal flex items-center justify-between mb-5">
-          <h2 className="text-lg font-semibold text-white tracking-tight">Latest News</h2>
+          <h2 className="text-lg font-semibold text-white tracking-tight">חדשות אחרונות</h2>
           <Link
             href="/news"
             className="flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300 transition-colors group"
           >
-            View all <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+            הצג הכל <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
           </Link>
         </div>
         {recentNews.length === 0 ? (
           <Card>
             <CardBody>
               <p className="text-sm text-gray-500 text-center py-6">
-                No news yet — run the agent to start
+                עדיין אין חדשות — הפעל את הסוכן כדי להתחיל
               </p>
             </CardBody>
           </Card>
@@ -170,19 +171,19 @@ export default async function HomePage() {
       {/* Top Stock Picks */}
       <section>
         <div className="reveal flex items-center justify-between mb-5">
-          <h2 className="text-lg font-semibold text-white tracking-tight">Top Stock Picks</h2>
+          <h2 className="text-lg font-semibold text-white tracking-tight">המלצות מובילות</h2>
           <Link
             href="/stocks"
             className="flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300 transition-colors group"
           >
-            View all <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+            הצג הכל <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
           </Link>
         </div>
         {topStocks.length === 0 ? (
           <Card>
             <CardBody>
               <p className="text-sm text-gray-500 text-center py-6">
-                No picks yet — run the agent to start
+                עדיין אין המלצות — הפעל את הסוכן כדי להתחיל
               </p>
             </CardBody>
           </Card>
@@ -215,8 +216,8 @@ export default async function HomePage() {
                   <p className="text-xs text-gray-500 mb-2">{s.companyName}</p>
                   <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">{s.reason}</p>
                   {s.priceAtTime && (
-                    <p className="text-xs text-gray-600 mt-2.5 font-mono">
-                      Entry ${s.priceAtTime.toFixed(2)}
+                    <p className="text-xs text-gray-600 mt-2.5">
+                      כניסה <span className="font-mono" dir="ltr">${s.priceAtTime.toFixed(2)}</span>
                     </p>
                   )}
                 </div>
@@ -227,6 +228,19 @@ export default async function HomePage() {
       </section>
     </div>
   )
+}
+
+function statusLabel(status?: string): string {
+  switch (status) {
+    case 'success':
+      return 'הצליח'
+    case 'running':
+      return 'פועל'
+    case 'error':
+      return 'שגיאה'
+    default:
+      return 'טרם הופעל'
+  }
 }
 
 const accentMap = {

@@ -4,12 +4,20 @@ import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { ExternalLink, TrendingUp, TrendingDown, Minus, Quote, BadgeCheck } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
+import { he } from 'date-fns/locale'
 import { Badge } from '@/components/ui/Badge'
 import { Card, CardBody } from '@/components/ui/Card'
 import { Skeleton } from '@/components/ui/Skeleton'
 import type { StockQuote, HistoricalPoint, StockAction } from '@/types'
 
 const MiniChart = dynamic(() => import('./MiniChart').then((m) => m.MiniChart), { ssr: false })
+
+const actionLabels: Record<string, string> = {
+  buy: 'קנייה',
+  watch: 'מעקב',
+  sell: 'מכירה',
+  avoid: 'הימנעות',
+}
 
 interface StockCardProps {
   ticker: string
@@ -80,7 +88,7 @@ export function StockCard({
           <MiniChart data={history} isPositive={isPositive} entryPrice={priceAtTime} />
         ) : (
           <div className="h-24 flex items-center justify-center text-xs text-gray-600">
-            No chart data
+            אין נתוני גרף
           </div>
         )}
       </div>
@@ -90,10 +98,10 @@ export function StockCard({
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="text-2xl font-bold text-white font-mono tracking-tight">{ticker}</span>
+              <span className="text-2xl font-bold text-white font-mono tracking-tight" dir="ltr">{ticker}</span>
               {verified && (
                 <span
-                  title={exchange ? `Verified on ${exchange}` : 'Verified ticker'}
+                  title={exchange ? `מאומת בבורסת ${exchange}` : 'טיקר מאומת'}
                   className="inline-flex items-center"
                 >
                   <BadgeCheck className="h-4 w-4 text-blue-400" />
@@ -107,7 +115,7 @@ export function StockCard({
           </div>
           <div className="flex flex-col items-end gap-2">
             <Badge variant={action as StockAction} className="text-sm font-bold px-3 py-1">
-              {action.toUpperCase()}
+              {actionLabels[action] ?? action}
             </Badge>
             <div className="w-20">
               <div className="h-1 rounded-full bg-white/10">
@@ -116,7 +124,7 @@ export function StockCard({
                   style={{ width: `${confidence * 10}%` }}
                 />
               </div>
-              <p className="text-[10px] text-gray-500 mt-0.5 text-right">{confidence}/10 conf</p>
+              <p className="text-[10px] text-gray-500 mt-0.5">ביטחון {confidence}/10</p>
             </div>
           </div>
         </div>
@@ -127,10 +135,11 @@ export function StockCard({
             <Skeleton className="h-8 w-24" />
           ) : currentPrice ? (
             <>
-              <span className="text-2xl font-bold text-white font-mono tabular-nums">
+              <span className="text-2xl font-bold text-white font-mono tabular-nums" dir="ltr">
                 ${currentPrice.toFixed(2)}
               </span>
               <span
+                dir="ltr"
                 className={`flex items-center gap-0.5 text-sm font-semibold ${
                   isPositive ? 'text-emerald-400' : 'text-red-400'
                 }`}
@@ -146,21 +155,22 @@ export function StockCard({
               </span>
               {vsEntry !== null && (
                 <span
+                  dir="ltr"
                   className={`text-xs font-mono ${
                     parseFloat(vsEntry) >= 0 ? 'text-emerald-400/70' : 'text-red-400/70'
                   }`}
                 >
-                  {parseFloat(vsEntry) >= 0 ? '+' : ''}{vsEntry}% vs entry
+                  {parseFloat(vsEntry) >= 0 ? '+' : ''}{vsEntry}% מול כניסה
                 </span>
               )}
               {targetPrice && (
-                <span className="text-xs text-gray-400 ml-auto">
-                  Target: <span className="text-white font-mono">${targetPrice}</span>
+                <span className="text-xs text-gray-400 ms-auto">
+                  יעד: <span className="text-white font-mono" dir="ltr">${targetPrice}</span>
                 </span>
               )}
             </>
           ) : (
-            <span className="text-sm text-gray-500">Price unavailable</span>
+            <span className="text-sm text-gray-500">מחיר לא זמין</span>
           )}
         </div>
 
@@ -177,10 +187,10 @@ export function StockCard({
 
         {/* Footer */}
         <div className="flex items-center justify-between text-xs text-gray-500 pt-1">
-          <span>{formatDistanceToNow(new Date(publishedAt), { addSuffix: true })}</span>
+          <span>{formatDistanceToNow(new Date(publishedAt), { addSuffix: true, locale: he })}</span>
           <div className="flex items-center gap-2">
             {priceAtTime && (
-              <span className="font-mono">Entry ${priceAtTime.toFixed(2)}</span>
+              <span>כניסה <span className="font-mono" dir="ltr">${priceAtTime.toFixed(2)}</span></span>
             )}
             {sourceUrl && (
               <a

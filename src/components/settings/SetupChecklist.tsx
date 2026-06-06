@@ -10,22 +10,22 @@ interface ConfigStatus {
 export function SetupChecklist({ status }: { status: ConfigStatus }) {
   const items = [
     {
-      label: 'YouTube Data API Key',
-      description: 'Required to fetch videos and lives',
+      label: 'מפתח YouTube Data API',
+      description: 'נדרש כדי למשוך סרטונים ושידורים חיים',
       ok: status.youtube,
       required: true,
       link: 'https://console.cloud.google.com/apis/library/youtube.googleapis.com',
       linkLabel: 'Google Cloud Console',
     },
     {
-      label: 'Micah Stokes Channel ID',
-      description: 'The YouTube channel to track',
+      label: 'מזהה ערוץ מיקה סטוקס',
+      description: 'ערוץ היוטיוב למעקב',
       ok: status.channelId,
       required: true,
     },
     {
-      label: 'Claude / Anthropic API Key',
-      description: 'Required for AI analysis of transcripts',
+      label: 'מפתח Claude / Anthropic API',
+      description: 'נדרש לניתוח AI של התוכן',
       ok: status.claude,
       required: true,
       link: 'https://console.anthropic.com/',
@@ -33,7 +33,7 @@ export function SetupChecklist({ status }: { status: ConfigStatus }) {
     },
     {
       label: 'Twitter/X Bearer Token',
-      description: 'Optional — tracks tweets by Micah',
+      description: 'אופציונלי — מעקב אחרי ציוצים של מיקה',
       ok: status.twitter,
       required: false,
       link: 'https://developer.twitter.com/en/portal/dashboard',
@@ -60,7 +60,7 @@ export function SetupChecklist({ status }: { status: ConfigStatus }) {
               <span className="text-sm font-medium text-white">{item.label}</span>
               {!item.required && (
                 <span className="text-xs text-gray-500 bg-white/10 px-1.5 py-0.5 rounded">
-                  optional
+                  אופציונלי
                 </span>
               )}
             </div>
@@ -72,7 +72,7 @@ export function SetupChecklist({ status }: { status: ConfigStatus }) {
                 rel="noopener noreferrer"
                 className="text-xs text-blue-400 hover:text-blue-300 underline mt-1 inline-block"
               >
-                Get key from {item.linkLabel} →
+                קבלת מפתח מ-{item.linkLabel} ←
               </a>
             )}
           </div>

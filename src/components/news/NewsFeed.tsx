@@ -52,12 +52,12 @@ export function NewsFeed() {
       ) : data?.items?.length === 0 ? (
         <EmptyState
           icon={Newspaper}
-          title="No news yet"
-          description="The agent hasn't extracted any news items yet. Make sure your API keys are configured and click 'Run Agent Now' in Settings."
+          title="עדיין אין חדשות"
+          description="הסוכן עדיין לא חילץ פריטי חדשות. ודא שמפתחות ה-API מוגדרים ולחץ 'הפעל סוכן עכשיו' בעמוד ההגדרות."
         />
       ) : (
         <>
-          <div className="text-xs text-gray-500">{data?.total ?? 0} items</div>
+          <div className="text-xs text-gray-500">{data?.total ?? 0} פריטים</div>
           <div className="space-y-4">
             {data?.items?.map(
               (item: {
@@ -104,7 +104,7 @@ export function NewsFeed() {
                 onClick={() => setPage((p) => p - 1)}
                 className="rounded-lg px-4 py-2 text-sm bg-white/10 text-gray-300 disabled:opacity-40 hover:bg-white/20 transition-colors"
               >
-                Previous
+                הקודם
               </button>
               <span className="rounded-lg px-4 py-2 text-sm text-gray-400">
                 {page} / {data.pages}
@@ -114,7 +114,7 @@ export function NewsFeed() {
                 onClick={() => setPage((p) => p + 1)}
                 className="rounded-lg px-4 py-2 text-sm bg-white/10 text-gray-300 disabled:opacity-40 hover:bg-white/20 transition-colors"
               >
-                Next
+                הבא
               </button>
             </div>
           )}

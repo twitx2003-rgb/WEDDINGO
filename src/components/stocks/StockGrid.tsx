@@ -12,6 +12,14 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
 const actions = ['all', 'buy', 'watch', 'sell', 'avoid']
 
+const actionLabels: Record<string, string> = {
+  all: 'הכל',
+  buy: 'קנייה',
+  watch: 'מעקב',
+  sell: 'מכירה',
+  avoid: 'הימנעות',
+}
+
 export function StockGrid() {
   const [action, setAction] = useState('all')
   const [minConfidence, setMinConfidence] = useState(1)
@@ -39,12 +47,12 @@ export function StockGrid() {
                   : 'bg-white/10 text-gray-300 hover:bg-white/20'
               )}
             >
-              {a === 'all' ? 'All' : a.toUpperCase()}
+              {actionLabels[a] ?? a}
             </button>
           ))}
         </div>
         <div className="flex items-center gap-2 text-xs text-gray-400">
-          <span>Min confidence:</span>
+          <span>ביטחון מינימלי:</span>
           <input
             type="range"
             min={1}
@@ -66,12 +74,12 @@ export function StockGrid() {
       ) : data?.stocks?.length === 0 ? (
         <EmptyState
           icon={TrendingUp}
-          title="No stock picks yet"
-          description="The agent hasn't found any stock recommendations. Make sure your API keys are configured and run the agent from Settings."
+          title="עדיין אין המלצות מניות"
+          description="הסוכן עדיין לא מצא המלצות. ודא שמפתחות ה-API מוגדרים והפעל את הסוכן מעמוד ההגדרות."
         />
       ) : (
         <>
-          <div className="text-xs text-gray-500">{data?.total ?? 0} unique picks</div>
+          <div className="text-xs text-gray-500">{data?.total ?? 0} המלצות ייחודיות</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {data?.stocks?.map(
               (stock: {

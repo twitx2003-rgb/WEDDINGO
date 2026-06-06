@@ -2,7 +2,7 @@ import { Newspaper } from 'lucide-react'
 import { NewsFeed } from '@/components/news/NewsFeed'
 
 export const metadata = {
-  title: 'Market News — Micah Tracker',
+  title: 'חדשות שוק — מעקב מיקה סטוקס',
 }
 
 export default function NewsPage() {
@@ -13,8 +13,8 @@ export default function NewsPage() {
           <Newspaper className="h-6 w-6 text-blue-400" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">Market News</h1>
-          <p className="text-sm text-gray-400">AI-extracted from Micah Stokes videos</p>
+          <h1 className="text-2xl font-bold tracking-tight text-white">חדשות שוק</h1>
+          <p className="text-sm text-gray-400">חולצו בבינה מלאכותית מסרטוני מיקה סטוקס</p>
         </div>
       </div>
       <NewsFeed />

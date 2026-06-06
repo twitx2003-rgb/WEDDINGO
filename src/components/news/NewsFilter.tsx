@@ -12,19 +12,19 @@ interface NewsFilterProps {
 }
 
 const categories = [
-  { value: 'all', label: 'All' },
-  { value: 'earnings', label: 'Earnings' },
-  { value: 'market_move', label: 'Market Move' },
-  { value: 'sector', label: 'Sector' },
-  { value: 'macro', label: 'Macro' },
-  { value: 'general', label: 'General' },
+  { value: 'all', label: 'הכל' },
+  { value: 'earnings', label: 'דוחות' },
+  { value: 'market_move', label: 'תנועת שוק' },
+  { value: 'sector', label: 'סקטור' },
+  { value: 'macro', label: 'מאקרו' },
+  { value: 'general', label: 'כללי' },
 ]
 
 const sentiments = [
-  { value: 'all', label: 'All' },
-  { value: 'bullish', label: 'Bullish' },
-  { value: 'bearish', label: 'Bearish' },
-  { value: 'neutral', label: 'Neutral' },
+  { value: 'all', label: 'הכל' },
+  { value: 'bullish', label: 'חיובי' },
+  { value: 'bearish', label: 'שלילי' },
+  { value: 'neutral', label: 'ניטרלי' },
 ]
 
 export function NewsFilter({
@@ -39,7 +39,7 @@ export function NewsFilter({
     <div className="space-y-3">
       <input
         type="search"
-        placeholder="Search by keyword or $TICKER..."
+        placeholder="חיפוש לפי מילת מפתח או טיקר $..."
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
         className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-gray-500 outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/30"
