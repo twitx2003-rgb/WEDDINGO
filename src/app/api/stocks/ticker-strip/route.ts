@@ -7,7 +7,7 @@ export const revalidate = 0
 export async function GET() {
   const stocks = await db.stockRecommendation.findMany({
     where: { action: 'buy' },
-    orderBy: [{ confidence: 'desc' }, { publishedAt: 'desc' }],
+    orderBy: [{ publishedAt: 'desc' }, { confidence: 'desc' }],
     take: 12,
     distinct: ['ticker'],
   })

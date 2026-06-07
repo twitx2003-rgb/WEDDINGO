@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
   const [items, total] = await Promise.all([
     db.newsItem.findMany({
       where,
-      orderBy: [{ importance: 'desc' }, { publishedAt: 'desc' }],
+      orderBy: [{ publishedAt: 'desc' }, { importance: 'desc' }],
       skip: (page - 1) * limit,
       take: limit,
       include: { video: true },

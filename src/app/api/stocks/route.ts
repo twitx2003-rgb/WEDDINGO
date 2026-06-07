@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   // Get all recommendations, then deduplicate by ticker (latest + highest confidence)
   const all = await db.stockRecommendation.findMany({
     where,
-    orderBy: [{ confidence: 'desc' }, { publishedAt: 'desc' }],
+    orderBy: [{ publishedAt: 'desc' }, { confidence: 'desc' }],
     include: { video: true },
   })
 

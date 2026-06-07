@@ -23,13 +23,14 @@ export default async function HomePage() {
       }),
       db.agentRun.findFirst({ orderBy: { startedAt: 'desc' } }),
       db.newsItem.findMany({
-        orderBy: [{ importance: 'desc' }, { publishedAt: 'desc' }],
+        orderBy: [{ publishedAt: 'desc' }, { importance: 'desc' }],
         take: 4,
         include: { video: true },
       }),
       db.stockRecommendation.findMany({
-        orderBy: [{ confidence: 'desc' }, { publishedAt: 'desc' }],
+        orderBy: [{ publishedAt: 'desc' }, { confidence: 'desc' }],
         take: 3,
+        distinct: ['ticker'],
         include: { video: true },
       }),
     ])
