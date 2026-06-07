@@ -17,7 +17,6 @@ const categories = [
   { value: 'market_move', label: 'תנועת שוק' },
   { value: 'sector', label: 'סקטור' },
   { value: 'macro', label: 'מאקרו' },
-  { value: 'general', label: 'כללי' },
 ]
 
 const sentiments = [

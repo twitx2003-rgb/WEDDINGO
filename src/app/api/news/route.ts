@@ -9,8 +9,15 @@ export async function GET(req: NextRequest) {
   const sentiment = searchParams.get('sentiment')
   const search = searchParams.get('search')
 
+  const MARKET_CATEGORIES = ['earnings', 'market_move', 'sector', 'macro']
+
   const where: Record<string, unknown> = {}
-  if (category && category !== 'all') where.category = category
+  if (category && category !== 'all') {
+    where.category = category
+  } else {
+    // Default: show only market-relevant categories, exclude generic catch-all items
+    where.category = { in: MARKET_CATEGORIES }
+  }
   if (sentiment && sentiment !== 'all') where.sentiment = sentiment
   if (search) {
     where.OR = [
