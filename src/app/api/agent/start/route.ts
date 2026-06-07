@@ -19,7 +19,9 @@ export async function POST() {
     }
   }
 
-  await runAgent()
+  // Vercel has a 60-second limit — analyze at most 2 videos per manual trigger.
+  // The hourly GitHub Actions job handles the full backlog (up to 50 videos).
+  await runAgent(2)
 
   return NextResponse.json({ ok: true, message: 'Agent completed' })
 }

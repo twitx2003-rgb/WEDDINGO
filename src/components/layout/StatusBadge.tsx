@@ -30,6 +30,11 @@ export function StatusBadge() {
 
   const isRunning = status.agentStatus === 'running'
   const lastFinished = status.lastRun?.finishedAt
+  // Only show error if it happened in the last 90 minutes — a later successful run clears it
+  const isRecentError =
+    status.lastRun?.status === 'error' &&
+    status.lastRun?.finishedAt &&
+    Date.now() - new Date(status.lastRun.finishedAt).getTime() < 90 * 60 * 1000
 
   return (
     <div className="flex items-center gap-1.5 text-xs text-gray-400">
@@ -38,7 +43,7 @@ export function StatusBadge() {
           <Activity className="h-3 w-3 text-blue-400 animate-pulse" />
           <span className="text-blue-400">הסוכן פועל...</span>
         </>
-      ) : status.lastRun?.status === 'error' ? (
+      ) : isRecentError ? (
         <>
           <AlertCircle className="h-3 w-3 text-red-400" />
           <span className="text-red-400">שגיאת סוכן</span>
