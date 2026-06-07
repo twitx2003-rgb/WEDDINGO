@@ -26,8 +26,8 @@ export async function runAgent(maxVideos = 3): Promise<void> {
     // Reset videos that were marked analyzed but have no extracted content
     await db.$executeRaw`UPDATE "Video" SET analyzed = false WHERE platform = 'youtube' AND id NOT IN (SELECT DISTINCT "videoId" FROM "NewsItem") AND id NOT IN (SELECT DISTINCT "videoId" FROM "StockRecommendation")`
 
-    // Step 2: Fetch recent YouTube videos
-    const videos = await listRecentVideos(14)
+    // Step 2: Fetch recent YouTube videos (30 days to catch full backlog on first run)
+    const videos = await listRecentVideos(30)
     videosFound += videos.length
     console.log(`[Agent] Found ${videos.length} YouTube videos`)
 

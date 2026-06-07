@@ -52,35 +52,41 @@ export async function listRecentVideos(sinceDays = 2): Promise<YouTubeVideo[]> {
   const publishedAfter = sinceDate.toISOString()
 
   const videos: YouTubeVideo[] = []
+  let pageToken: string | undefined
 
-  const searchUrl = new URL('https://www.googleapis.com/youtube/v3/search')
-  searchUrl.searchParams.set('key', apiKey)
-  searchUrl.searchParams.set('channelId', channelId)
-  searchUrl.searchParams.set('type', 'video')
-  searchUrl.searchParams.set('order', 'date')
-  searchUrl.searchParams.set('maxResults', '15')
-  searchUrl.searchParams.set('publishedAfter', publishedAfter)
-  searchUrl.searchParams.set('part', 'snippet')
+  do {
+    const searchUrl = new URL('https://www.googleapis.com/youtube/v3/search')
+    searchUrl.searchParams.set('key', apiKey)
+    searchUrl.searchParams.set('channelId', channelId)
+    searchUrl.searchParams.set('type', 'video')
+    searchUrl.searchParams.set('order', 'date')
+    searchUrl.searchParams.set('maxResults', '50')
+    searchUrl.searchParams.set('publishedAfter', publishedAfter)
+    searchUrl.searchParams.set('part', 'snippet')
+    if (pageToken) searchUrl.searchParams.set('pageToken', pageToken)
 
-  const res = await fetch(searchUrl.toString())
-  if (!res.ok) {
-    console.error('[YouTube] Search API error:', await res.text())
-    return []
-  }
+    const res = await fetch(searchUrl.toString())
+    if (!res.ok) {
+      console.error('[YouTube] Search API error:', await res.text())
+      break
+    }
 
-  const data = await res.json()
-  for (const item of data.items ?? []) {
-    videos.push({
-      id: item.id.videoId,
-      title: item.snippet.title,
-      url: `https://www.youtube.com/watch?v=${item.id.videoId}`,
-      publishedAt: new Date(item.snippet.publishedAt),
-      thumbnailUrl: item.snippet.thumbnails?.medium?.url ?? null,
-      isLive: item.snippet.liveBroadcastContent === 'live',
-      channelId: item.snippet.channelId,
-      description: item.snippet.description ?? '',
-    })
-  }
+    const data = await res.json()
+    for (const item of data.items ?? []) {
+      videos.push({
+        id: item.id.videoId,
+        title: item.snippet.title,
+        url: `https://www.youtube.com/watch?v=${item.id.videoId}`,
+        publishedAt: new Date(item.snippet.publishedAt),
+        thumbnailUrl: item.snippet.thumbnails?.medium?.url ?? null,
+        isLive: item.snippet.liveBroadcastContent === 'live',
+        channelId: item.snippet.channelId,
+        description: item.snippet.description ?? '',
+      })
+    }
+
+    pageToken = data.nextPageToken
+  } while (pageToken)
 
   return videos
 }
