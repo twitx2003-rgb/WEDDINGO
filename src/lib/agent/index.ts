@@ -23,7 +23,9 @@ export async function runAgent(maxVideos = 3): Promise<void> {
   let stocksExtracted = 0
 
   try {
-    // Reset videos that were marked analyzed but have no extracted content
+    // Always re-analyze the last 5 days so fresh Micah videos get picked up immediately
+    await db.$executeRaw`UPDATE "Video" SET analyzed = false WHERE platform = 'youtube' AND "publishedAt" > NOW() - INTERVAL '5 days'`
+    // Also reset any video that was marked analyzed but produced zero content
     await db.$executeRaw`UPDATE "Video" SET analyzed = false WHERE platform = 'youtube' AND id NOT IN (SELECT DISTINCT "videoId" FROM "NewsItem") AND id NOT IN (SELECT DISTINCT "videoId" FROM "StockRecommendation")`
 
     // Step 2: Fetch recent YouTube videos (30 days to catch full backlog on first run)
@@ -68,8 +70,9 @@ export async function runAgent(maxVideos = 3): Promise<void> {
       const fullDescription = await getVideoDescription(video.externalId, apiKey)
       const content = transcript ?? fullDescription ?? video.description
 
-      if (!content || content.trim().length < 50) {
-        console.log(`[Agent] Skipping ${video.title} — no content`)
+      console.log(`[Agent] Content: transcript=${!!transcript}, desc=${fullDescription.length}chars, stored=${video.description?.length ?? 0}chars`)
+      if (!content || content.trim().length < 20) {
+        console.log(`[Agent] Skipping ${video.title} — no content (${content?.trim().length ?? 0} chars)`)
         await db.video.update({ where: { id: video.id }, data: { analyzed: true } })
         continue
       }
