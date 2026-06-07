@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { TrendingUp, Newspaper, Settings, Activity } from 'lucide-react'
+import { TrendingUp, Newspaper, Settings, Activity, Video } from 'lucide-react'
 import { StatusBadge } from './StatusBadge'
 import { TickerStrip } from './TickerStrip'
 
@@ -19,6 +19,7 @@ export function Navbar() {
                 </span>
               </Link>
               <div className="flex items-center gap-1">
+                <NavLink href="/videos" icon={Video}>סרטונים</NavLink>
                 <NavLink href="/news" icon={Newspaper}>חדשות</NavLink>
                 <NavLink href="/stocks" icon={TrendingUp}>מניות</NavLink>
               </div>
