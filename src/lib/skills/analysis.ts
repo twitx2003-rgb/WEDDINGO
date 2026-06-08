@@ -2,59 +2,52 @@ import Anthropic from '@anthropic-ai/sdk'
 import { config } from '../env'
 import type { AnalysisResult } from '@/types'
 
-const SYSTEM_PROMPT = `You are a financial content analyst specializing in Israeli stock market commentary.
-Your task is to analyze content from Micah Stokes (מיקה סטוקס), an Israeli stock market analyst/trader
-who publishes in Hebrew. You will receive video titles, descriptions, and keyword tags.
+const SYSTEM_PROMPT = `You are extracting investment insights from Micah Stokes (מיקה סטוקס), an Israeli stock trader who speaks directly and specifically to his audience.
 
-SCOPE — extract ONLY:
-1. NEWS ITEMS: Direct market events — earnings reports, stock/index moves, sector trends, macro data (interest rates, inflation, GDP), company-specific news. If a topic is not directly about financial markets or publicly traded assets, do NOT include it.
-2. STOCK RECOMMENDATIONS: Specific stocks or ETFs Micah explicitly mentions or analyzes.
+YOUR JOB: Pull out his EXACT claims — not summaries. If he says "NVDA שברה $130 ועכשיו יעד $150", write that. If he says "קניתי AAPL ב-$180 עם סטופ $170", write that. The user reads your output INSTEAD of watching the video — make it feel like Micah is speaking.
 
-Do NOT extract: general life advice, personal stories, channel announcements, or any content unrelated to financial markets.
+SPECIFICITY RULES (most important):
+- Headlines must include SPECIFIC details: stock names, prices, % figures, levels. Never write "תנועה חיובית בשוק" — write "S&P500 עלה 1.2% — מה שמיקה רואה הבא"
+- Body must include: exact numbers, levels, targets, stop-losses, or earnings figures mentioned
+- If Micah gives a specific level (תמיכה, התנגדות, יעד) — include the price
+- If there's an earnings result — include the actual EPS or revenue beat/miss
+- Use Micah's own Hebrew phrasing when it appears in the description (e.g. "הסימנים שהראו", "התיק מדמם", "שיניתי את דעתי")
+- "reason" for stocks must explain WHY specifically — not "מניה מעניינת" but "שברה התנגדות ב-$X, יעד $Y, עצר על $Z"
 
-CRITICAL LANGUAGE RULE:
-- Write ALL free-text fields in fluent, natural Hebrew (עברית תקינה וזורמת).
-- This applies to: "headline", "body", and "reason".
-- Keep stock tickers in Latin letters (e.g. AAPL, TSLA, NVDA).
-- "companyName" may stay in its common official form.
-- The audience is Israeli — the text must read naturally in Hebrew, not translated-sounding.
+LANGUAGE: All free-text fields in natural Hebrew. Tickers in Latin. Sound like Micah talks — direct, personal, Israeli market trader voice.
 
-Category definitions (use the most specific that fits):
-- "earnings" — company earnings/results/guidance
-- "market_move" — index moves, stock price action, technical analysis
-- "sector" — sector rotation, industry trends
-- "macro" — rates, inflation, Fed, economic data, geopolitics affecting markets
-- "general" — only as last resort for clearly market-related content that fits none of the above
+SCOPE: Market news and stocks ONLY. Ignore: channel promotion, disclaimers, social links, generic advice.
 
-Other rules:
-- Tags/keywords often contain stock tickers — include them as relevant stocks
-- Israeli stocks: TEVA, ICL, NICE, CHKP; US stocks: AAPL, TSLA, NVDA
-- SpaceX = private company — note as "watch" with no ticker
-- When in doubt about a stock action, use "watch"
-- If the video is market-related, return at least 1 news item
+CATEGORIES:
+- "earnings" — company results, EPS, revenue, guidance
+- "market_move" — index/stock price action, technical levels, breakouts
+- "sector" — sector rotation, industry-specific moves
+- "macro" — Fed/interest rates, inflation, economic data, geopolitics
 
-Respond with valid JSON only in this exact format:
+Return at least 1 news item if ANY market content exists.
+
+JSON format:
 {
   "news": [
     {
-      "headline": "כותרת תמציתית בעברית עד 100 תווים",
-      "body": "סיכום של 2-3 משפטים בעברית",
-      "category": "earnings|market_move|sector|macro|general",
-      "sentiment": "bullish|bearish|neutral",
-      "tickers": ["AAPL", "TSLA"],
-      "quote": null,
-      "importance": 7
+      "headline": "מיקה: CRWD ו-AVGO מדווחות — תוצאות מעל הציפיות, מניות מזנקות 8%",
+      "body": "קראודסטרייק דיווחה על רווח של $0.93 למניה מול $0.86 צפוי. ברודקום עם הכנסות של $14.9B. מיקה: 'שתיהן עברו את הרמות שחיכיתי להן — אני בפנים'.",
+      "category": "earnings",
+      "sentiment": "bullish",
+      "tickers": ["CRWD", "AVGO"],
+      "quote": "שתיהן עברו את הרמות שחיכיתי להן — אני בפנים",
+      "importance": 9
     }
   ],
   "stocks": [
     {
-      "ticker": "AAPL",
-      "companyName": "Apple Inc.",
-      "action": "buy|watch|sell|avoid",
-      "confidence": 6,
-      "reason": "הסבר קצר בעברית מדוע המניה מעניינת",
-      "quote": null,
-      "targetPrice": null
+      "ticker": "CRWD",
+      "companyName": "CrowdStrike",
+      "action": "buy",
+      "confidence": 8,
+      "reason": "עברה $340 בדוחות — מיקה מחזיק עם יעד $380, סטופ $320",
+      "quote": "זה הבריקאאוט שחיכיתי לו",
+      "targetPrice": 380
     }
   ]
 }`
@@ -96,13 +89,13 @@ export async function analyzeTranscript(
     messages: [
       {
         role: 'user',
-        content: `Video Title: ${videoTitle}
-Published: ${publishedAt.toISOString()}
+        content: `Video Title (Micah's exact words — use this as the main angle): ${videoTitle}
+Published: ${publishedAt.toISOString().split('T')[0]}
 
-Transcript:
+Content (description + tags):
 ${truncatedTranscript}
 
-Extract news items and stock recommendations from this transcript. Return only JSON.`,
+Extract Micah's specific claims, levels, and stock calls. Capture his exact language. Return only JSON.`,
       },
     ],
   })
