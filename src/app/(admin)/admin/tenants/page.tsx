@@ -1,12 +1,23 @@
-// Tenant management — add tenants and copy their magic portal link
-// TODO: fetch tenants list, implement add/edit form, copy access_token link
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { UserPlus } from "lucide-react";
+import { redirect } from 'next/navigation'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from '@/components/ui/table'
+import { getAdminContext } from '@/lib/session'
+import { createAdminClient } from '@/lib/supabase/server'
+import { AddTenantForm } from '@/components/admin/AddTenantForm'
+import { CopyLinkButton } from '@/components/admin/CopyLinkButton'
 
-export default function TenantsPage() {
+export default async function TenantsPage() {
+  const ctx = await getAdminContext()
+  if (!ctx) redirect('/login')
+
+  const admin = createAdminClient()
+  const { data: tenants } = await admin
+    .from('users')
+    .select('id, name, apartment_number, phone, access_token')
+    .eq('building_id', ctx.building_id)
+    .eq('role', 'tenant')
+    .order('apartment_number')
+
   return (
     <div className="space-y-6" dir="rtl">
       <div className="flex items-center justify-between">
@@ -14,16 +25,14 @@ export default function TenantsPage() {
           <h1 className="text-2xl font-bold">ניהול דיירים</h1>
           <p className="text-muted-foreground">הוסף דיירים וצור קישורי גישה</p>
         </div>
-        <Button>
-          <UserPlus className="h-4 w-4 ml-2" />
-          הוסף דייר
-        </Button>
       </div>
+
+      <AddTenantForm />
 
       <Card>
         <CardHeader>
           <CardTitle>רשימת דיירים</CardTitle>
-          <CardDescription>לחץ על הסמל להעתקת קישור הגישה לוואטסאפ</CardDescription>
+          <CardDescription>לחץ על סמל ההעתקה לשליחת קישור הגישה לדייר</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
@@ -32,20 +41,32 @@ export default function TenantsPage() {
                 <TableHead>שם</TableHead>
                 <TableHead>דירה</TableHead>
                 <TableHead>טלפון</TableHead>
-                <TableHead>סטטוס</TableHead>
                 <TableHead>קישור גישה</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                  לא נמצאו דיירים — הוסף את הדייר הראשון
-                </TableCell>
-              </TableRow>
+              {tenants && tenants.length > 0 ? (
+                tenants.map((t) => (
+                  <TableRow key={t.id}>
+                    <TableCell className="font-medium">{t.name}</TableCell>
+                    <TableCell>{t.apartment_number}</TableCell>
+                    <TableCell>{t.phone ?? '—'}</TableCell>
+                    <TableCell>
+                      <CopyLinkButton token={t.access_token} />
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center text-muted-foreground py-8">
+                    לא נמצאו דיירים — הוסף את הדייר הראשון
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

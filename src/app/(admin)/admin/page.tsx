@@ -1,9 +1,52 @@
-// Admin Dashboard — shows balance, total debt, and open issues
-// TODO: fetch real data from Supabase via createAdminClient()
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Wallet, AlertCircle, TrendingDown } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Wallet, AlertCircle, TrendingDown } from 'lucide-react'
+import { getAdminContext } from '@/lib/session'
+import { createAdminClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
 
-export default function AdminDashboardPage() {
+export default async function AdminDashboardPage() {
+  const ctx = await getAdminContext()
+  if (!ctx) redirect('/login')
+
+  const admin = createAdminClient()
+  const now = new Date()
+  const month = now.getMonth() + 1
+  const year = now.getFullYear()
+  const building_id = ctx.building_id
+
+  const [
+    { data: paidPayments },
+    { data: allExpenses },
+    { data: openIssues },
+    { data: tenants },
+    { data: paidThisMonth },
+  ] = await Promise.all([
+    admin.from('payments').select('amount').eq('status', 'paid').in(
+      'user_id',
+      (await admin.from('users').select('id').eq('building_id', building_id).eq('role', 'tenant')).data?.map((u) => u.id) ?? []
+    ),
+    admin.from('expenses').select('amount').eq('building_id', building_id),
+    admin.from('issues').select('id', { count: 'exact' }).eq('building_id', building_id).eq('status', 'open'),
+    admin.from('users').select('id').eq('building_id', building_id).eq('role', 'tenant'),
+    admin
+      .from('payments')
+      .select('user_id')
+      .eq('month', month)
+      .eq('year', year)
+      .eq('status', 'paid'),
+  ])
+
+  const totalIncome = (paidPayments ?? []).reduce((s, p) => s + p.amount, 0)
+  const totalExpenses = (allExpenses ?? []).reduce((s, e) => s + e.amount, 0)
+  const balance = totalIncome - totalExpenses
+
+  const tenantCount = tenants?.length ?? 0
+  const paidTenantIds = new Set((paidThisMonth ?? []).map((p) => p.user_id))
+  const unpaidCount = tenantCount - paidTenantIds.size
+  const unpaidAmount = unpaidCount * ctx.buildings.monthly_fee
+
+  const openCount = openIssues?.length ?? 0
+
   return (
     <div className="space-y-6" dir="rtl">
       <div>
@@ -18,19 +61,23 @@ export default function AdminDashboardPage() {
             <Wallet className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">₪ —</div>
+            <div className={`text-2xl font-bold ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              ₪ {balance.toLocaleString('he-IL')}
+            </div>
             <p className="text-xs text-muted-foreground">תשלומים פחות הוצאות</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">חובות פתוחים</CardTitle>
+            <CardTitle className="text-sm font-medium">חובות פתוחים החודש</CardTitle>
             <TrendingDown className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">₪ —</div>
-            <p className="text-xs text-muted-foreground">סכום לא שולם החודש</p>
+            <div className="text-2xl font-bold text-red-600">
+              ₪ {unpaidAmount.toLocaleString('he-IL')}
+            </div>
+            <p className="text-xs text-muted-foreground">{unpaidCount} דיירים לא שילמו</p>
           </CardContent>
         </Card>
 
@@ -40,15 +87,11 @@ export default function AdminDashboardPage() {
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">—</div>
+            <div className="text-2xl font-bold">{openCount}</div>
             <p className="text-xs text-muted-foreground">ממתינות לטיפול</p>
           </CardContent>
         </Card>
       </div>
-
-      <p className="text-sm text-muted-foreground">
-        נתונים יוצגו לאחר חיבור ל-Supabase.
-      </p>
     </div>
-  );
+  )
 }
