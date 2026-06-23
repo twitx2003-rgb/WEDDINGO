@@ -29,12 +29,15 @@ export async function proxy(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
-  if (pathname.startsWith('/admin') && !user) {
+  // Protect the hobbyist dashboard (auth presence only — role is enforced
+  // in (dashboard)/layout.tsx via requireHobbyist()).
+  if (pathname.startsWith('/dashboard') && !user) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
+  // Logged-in users shouldn't see the auth pages.
   if ((pathname === '/login' || pathname === '/register') && user) {
-    return NextResponse.redirect(new URL('/admin', request.url))
+    return NextResponse.redirect(new URL('/', request.url))
   }
 
   return supabaseResponse

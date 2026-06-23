@@ -1,9 +1,8 @@
 import { createClient, createAdminClient } from './supabase/server'
-import type { Building, User } from './types'
+import type { Profile } from './types'
 
-export type AdminContext = User & { buildings: Building }
-
-export async function getAdminContext(): Promise<AdminContext | null> {
+// The signed-in user's profile (or null). Used by guards & server actions.
+export async function getCurrentProfile(): Promise<Profile | null> {
   const supabase = await createClient()
   const {
     data: { user },
@@ -11,12 +10,14 @@ export async function getAdminContext(): Promise<AdminContext | null> {
   if (!user) return null
 
   const admin = createAdminClient()
-  const { data } = await admin
-    .from('users')
-    .select('*, buildings(*)')
-    .eq('auth_id', user.id)
-    .eq('role', 'admin')
-    .single()
+  const { data } = await admin.from('profiles').select('*').eq('id', user.id).single()
 
-  return (data as AdminContext | null)
+  return (data as Profile | null)
+}
+
+// Convenience guard for hobbyist-only surfaces.
+export async function requireHobbyist(): Promise<Profile | null> {
+  const profile = await getCurrentProfile()
+  if (!profile || profile.role !== 'hobbyist') return null
+  return profile
 }

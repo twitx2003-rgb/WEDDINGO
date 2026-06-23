@@ -1,6 +1,8 @@
-# ועד-טק — Vaad-Tech
+# תחביב־כסף — Hobby Marketplace
 
-A minimalist Building Management System (HOA manager) for residential buildings.
+A two-sided Hebrew (RTL) marketplace that matches **customers** ("לקוח") with **hobbyists**
+("בעל תחביב") who offer services from their hobby — so hobbyists earn from what they love, and
+customers pay below full professional rates.
 
 **Stack:** Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · Shadcn UI · Supabase (PostgreSQL + Auth)
 
@@ -8,120 +10,98 @@ A minimalist Building Management System (HOA manager) for residential buildings.
 
 ## 1. Database Setup (Supabase)
 
-1. Create a new project at [supabase.com](https://supabase.com).
-2. Open **SQL Editor** and paste the entire contents of `supabase/schema.sql`.
-3. Click **Run** — this creates all five tables with foreign keys and enables Row Level Security.
+1. Create a project at [supabase.com](https://supabase.com).
+2. Open **SQL Editor**, paste the entire contents of `supabase/schema.sql`, and click **Run**.
+   This drops any previous tables, creates the three new tables, seeds the categories, and enables RLS.
 
 ### Tables
 
-| Table       | Purpose                                               |
-|-------------|-------------------------------------------------------|
-| `buildings` | Building info — address, apartment count, monthly fee |
-| `users`     | Admins + tenants. Tenants carry an `access_token` UUID used as their magic portal link |
-| `payments`  | One row per tenant per month/year, `paid` or `unpaid` |
-| `expenses`  | Building running costs logged by the admin            |
-| `issues`    | Service tickets submitted by tenants                  |
+| Table        | Purpose                                                                 |
+|--------------|-------------------------------------------------------------------------|
+| `profiles`   | One row per auth user. `role` is `customer` or `hobbyist`. `id` == `auth.users.id`. |
+| `categories` | Hobby categories (seeded in Hebrew, e.g. צילום, אפייה, נגרות).           |
+| `listings`   | Service listings published by hobbyists (title, price, category, status). |
+
+RLS is enabled on all tables; policies are deferred — MVP data access runs server-side with the
+service-role key.
 
 ---
 
 ## 2. Local Setup
 
 ```bash
-# 1. Install dependencies
 npm install
 
-# 2. Set up environment variables
+# Environment variables
 cp .env.local.example .env.local
-# Then fill in NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY,
-# and SUPABASE_SERVICE_ROLE_KEY from your Supabase project → Settings → API
+# Fill in from Supabase → Settings → API:
+#   NEXT_PUBLIC_SUPABASE_URL
+#   NEXT_PUBLIC_SUPABASE_ANON_KEY
+#   SUPABASE_SERVICE_ROLE_KEY
 
-# 3. Start the dev server
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
-### Terminal commands used to bootstrap this project (for reference)
-
-```bash
-npx create-next-app@latest vaad-tech \
-  --typescript --tailwind --eslint --app --src-dir \
-  --import-alias "@/*" --no-git --use-npm
-
-npm install @supabase/supabase-js @supabase/ssr \
-  class-variance-authority clsx tailwind-merge lucide-react \
-  @radix-ui/react-slot @radix-ui/react-label @radix-ui/react-dialog \
-  @radix-ui/react-dropdown-menu sonner react-hook-form \
-  @hookform/resolvers zod
-```
-
-Shadcn UI was wired up manually (the `shadcn init` command requires external network access to their registry).
-When you have network access, run: `npx shadcn@latest add <component>` to add more components.
+> The register flow and all data reads require a real `SUPABASE_SERVICE_ROLE_KEY` — placeholder
+> values let the server boot but won't authenticate.
 
 ---
 
-## 3. Folder Structure
+## 3. How it works
+
+- **Browse (`/`)** — public. Customers see active listings and filter by category (`/?category=<slug>`).
+- **Listing detail (`/listings/[id]`)** — public. A "הצג פרטי קשר" button reveals a WhatsApp
+  (`wa.me`) + phone link to contact the hobbyist directly. (In-app payments are a later phase.)
+- **Register (`/register`)** — choose a role: hobbyist or customer.
+- **Hobbyist dashboard (`/dashboard`)** — create/edit/pause/delete listings and edit the profile.
+  Guarded by middleware (auth) + the dashboard layout (`requireHobbyist`).
+
+---
+
+## 4. Folder Structure
 
 ```
 src/
 ├── app/
-│   ├── page.tsx                          ← Landing page / entry point
-│   │
-│   ├── (auth)/                           ← Route group: no shared layout
-│   │   ├── login/page.tsx                ← Admin email + password login
-│   │   └── register/page.tsx             ← Admin signup + building creation
-│   │
-│   ├── (admin)/                          ← Route group: shared admin sidebar
-│   │   └── admin/
-│   │       ├── layout.tsx                ← Admin shell with navigation
-│   │       ├── page.tsx                  ← Dashboard (balance, debts, open tickets)
-│   │       ├── tenants/page.tsx          ← Add/edit tenants, copy magic links
-│   │       ├── payments/page.tsx         ← Mark paid/unpaid per month
-│   │       ├── expenses/page.tsx         ← Log building expenses
-│   │       └── issues/page.tsx           ← View and update service tickets
-│   │
-│   └── (tenant)/                         ← Route group: tenant-facing (no auth wall)
-│       └── portal/[token]/
-│           ├── page.tsx                  ← Personal payment status view
-│           └── ticket/page.tsx           ← Submit a service ticket
-│
+│   ├── layout.tsx                       ← lang="he" dir="rtl", metadata
+│   ├── page.tsx                         ← browse / landing (category filter + listing grid)
+│   ├── listings/[id]/page.tsx           ← public listing detail + contact reveal
+│   ├── (auth)/
+│   │   ├── actions.ts                   ← login / register(role) / logout
+│   │   ├── login/page.tsx
+│   │   └── register/page.tsx
+│   └── (dashboard)/                     ← hobbyist-only
+│       ├── layout.tsx                   ← requireHobbyist guard + sidebar
+│       └── dashboard/
+│           ├── page.tsx                 ← my listings (table)
+│           ├── actions.ts               ← create/update/delete/toggle listing
+│           ├── listings/new/page.tsx
+│           ├── listings/[id]/edit/page.tsx
+│           └── profile/
+│               ├── page.tsx
+│               └── actions.ts           ← updateProfile
 ├── components/
-│   └── ui/                               ← Shadcn-style base components
-│       ├── button.tsx
-│       ├── card.tsx
-│       ├── input.tsx
-│       ├── label.tsx
-│       ├── badge.tsx
-│       └── table.tsx
-│
+│   ├── ui/                              ← Shadcn base (button, card, input, label, badge,
+│   │                                       table, textarea, select)
+│   ├── auth/                            ← LoginForm, RegisterForm (role toggle)
+│   ├── listings/                        ← ListingCard, CategoryFilter, ListingForm,
+│   │                                       ListingActions, ContactReveal
+│   ├── profile/                         ← ProfileForm
+│   └── layout/                          ← SiteHeader
 └── lib/
-    ├── utils.ts                          ← cn() helper (clsx + tailwind-merge)
-    ├── types.ts                          ← TypeScript types for all DB tables
+    ├── utils.ts                         ← cn()
+    ├── types.ts                         ← Profile, Category, Listing, ListingWithRelations
+    ├── session.ts                       ← getCurrentProfile(), requireHobbyist()
     └── supabase/
-        ├── client.ts                     ← Browser Supabase client
-        └── server.ts                     ← Server client + admin (service-role) client
+        ├── client.ts                    ← browser client
+        └── server.ts                    ← server client + admin (service-role) client
 ```
-
-### Why Route Groups?
-
-- `(auth)` — login/register pages share no layout; the parentheses mean they don't add a URL segment.
-- `(admin)` — all `/admin/*` routes share the sidebar `layout.tsx` with navigation.
-- `(tenant)` — tenant portal routes at `/portal/[token]/*` are completely separate from the admin section.
-
-### Tenant Magic Link
-
-Each tenant row has an `access_token` UUID column. The admin copies the URL  
-`https://your-app.com/portal/<access_token>` and sends it via WhatsApp.  
-No email, no password — the token is the credential.
 
 ---
 
-## Next Steps (feature implementation)
+## Next steps (later phases)
 
-1. **Auth (Admin):** Wire `(auth)/login` and `(auth)/register` to Supabase `signInWithPassword` / `signUp`.
-2. **Admin Dashboard:** Server component fetching real aggregates from Supabase via `createAdminClient()`.
-3. **Tenants:** Add/edit form with server action; auto-copy portal link to clipboard.
-4. **Payments:** Toggle `paid`/`unpaid` per tenant per month via server action.
-5. **Expenses:** `addExpense` server action; running balance calculation.
-6. **Issues:** `updateIssueStatus` server action; tenant `submitIssue` server action.
-7. **RLS:** Add Supabase Row Level Security policies so each tenant can only read their own rows.
+In-app payments/checkout · Supabase Storage image upload · in-app chat · ratings & reviews ·
+advanced search/filters · customer profile-edit page.

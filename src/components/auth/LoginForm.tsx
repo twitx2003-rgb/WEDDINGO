@@ -19,7 +19,7 @@ export function LoginForm() {
       )}
       <div className="space-y-2">
         <Label htmlFor="email">אימייל</Label>
-        <Input id="email" name="email" type="email" placeholder="vaad@example.com" required />
+        <Input id="email" name="email" type="email" placeholder="you@example.com" required />
       </div>
       <div className="space-y-2">
         <Label htmlFor="password">סיסמה</Label>
