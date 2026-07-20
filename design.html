@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0a12">
+<title>Design System — Aurora</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ec4899'/%3E%3Cstop offset='.5' stop-color='%238b5cf6'/%3E%3Cstop offset='1' stop-color='%235b6ef5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='url(%23g)'/%3E%3C/svg%3E">
+<style>
+/* ===== פונטים עבריים מוטמעים ===== */
+@font-face{font-family:'Rubik';src:url('design-system/fonts/rubik-hebrew-400-normal.woff2') format('woff2');font-weight:400;font-display:swap;unicode-range:U+0590-05FF,U+20AA,U+25CC,U+FB1D-FB4F;}
+@font-face{font-family:'Rubik';src:url('design-system/fonts/rubik-latin-400-normal.woff2') format('woff2');font-weight:400;font-display:swap;}
+@font-face{font-family:'Rubik';src:url('design-system/fonts/rubik-hebrew-500-normal.woff2') format('woff2');font-weight:500;font-display:swap;unicode-range:U+0590-05FF,U+20AA,U+25CC,U+FB1D-FB4F;}
+@font-face{font-family:'Rubik';src:url('design-system/fonts/rubik-latin-500-normal.woff2') format('woff2');font-weight:500;font-display:swap;}
+@font-face{font-family:'Rubik';src:url('design-system/fonts/rubik-hebrew-600-normal.woff2') format('woff2');font-weight:600;font-display:swap;unicode-range:U+0590-05FF,U+20AA,U+25CC,U+FB1D-FB4F;}
+@font-face{font-family:'Rubik';src:url('design-system/fonts/rubik-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap;}
+@font-face{font-family:'Rubik';src:url('design-system/fonts/rubik-hebrew-700-normal.woff2') format('woff2');font-weight:700;font-display:swap;unicode-range:U+0590-05FF,U+20AA,U+25CC,U+FB1D-FB4F;}
+@font-face{font-family:'Rubik';src:url('design-system/fonts/rubik-latin-700-normal.woff2') format('woff2');font-weight:700;font-display:swap;}
+@font-face{font-family:'Rubik';src:url('design-system/fonts/rubik-hebrew-800-normal.woff2') format('woff2');font-weight:800;font-display:swap;unicode-range:U+0590-05FF,U+20AA,U+25CC,U+FB1D-FB4F;}
+@font-face{font-family:'Rubik';src:url('design-system/fonts/rubik-latin-800-normal.woff2') format('woff2');font-weight:800;font-display:swap;}
+@font-face{font-family:'Assistant';src:url('design-system/fonts/assistant-hebrew-400-normal.woff2') format('woff2');font-weight:400;font-display:swap;unicode-range:U+0590-05FF,U+20AA,U+25CC,U+FB1D-FB4F;}
+@font-face{font-family:'Assistant';src:url('design-system/fonts/assistant-latin-400-normal.woff2') format('woff2');font-weight:400;font-display:swap;}
+@font-face{font-family:'Assistant';src:url('design-system/fonts/assistant-hebrew-500-normal.woff2') format('woff2');font-weight:500;font-display:swap;unicode-range:U+0590-05FF,U+20AA,U+25CC,U+FB1D-FB4F;}
+@font-face{font-family:'Assistant';src:url('design-system/fonts/assistant-latin-500-normal.woff2') format('woff2');font-weight:500;font-display:swap;}
+@font-face{font-family:'Assistant';src:url('design-system/fonts/assistant-hebrew-600-normal.woff2') format('woff2');font-weight:600;font-display:swap;unicode-range:U+0590-05FF,U+20AA,U+25CC,U+FB1D-FB4F;}
+@font-face{font-family:'Assistant';src:url('design-system/fonts/assistant-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap;}
+@font-face{font-family:'Assistant';src:url('design-system/fonts/assistant-hebrew-700-normal.woff2') format('woff2');font-weight:700;font-display:swap;unicode-range:U+0590-05FF,U+20AA,U+25CC,U+FB1D-FB4F;}
+@font-face{font-family:'Assistant';src:url('design-system/fonts/assistant-latin-700-normal.woff2') format('woff2');font-weight:700;font-display:swap;}
+
+/* ===== טוקנים ===== */
+:root{
+  --bg:#0b0a12; --bg-sidebar:#0a0810;
+  --surface:#16141f; --surface-2:#1e1b2b; --surface-3:#252236;
+  --border:rgba(255,255,255,.07); --border-strong:rgba(255,255,255,.13);
+  --text:#f6f5fb; --text-body:#b7b3c9; --text-muted:#89849c;
+  --pink:#ec4899; --violet:#8b5cf6; --blue:#5b6ef5; --indigo:#6366f1;
+  --gradient:linear-gradient(135deg,#ec4899 0%,#8b5cf6 52%,#5b6ef5 100%);
+  --gradient-soft:linear-gradient(135deg,rgba(236,72,153,.16),rgba(139,92,246,.16),rgba(91,110,245,.16));
+  --font-display:'Rubik','Poppins',system-ui,sans-serif;
+  --font-body:'Assistant',system-ui,sans-serif;
+  --space-4:16px; --space-5:24px; --space-6:32px; --space-7:48px;
+  --r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:22px; --r-pill:999px;
+  --shadow-card:0 4px 24px rgba(0,0,0,.35);
+  --glow:0 10px 30px -8px rgba(139,92,246,.5);
+  --ease:cubic-bezier(.22,.8,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--text-body);
+  font-family:var(--font-body); font-size:1rem; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(50rem 34rem at 90% -8%,rgba(139,92,246,.16),transparent 60%),
+    radial-gradient(44rem 30rem at -8% 18%,rgba(236,72,153,.12),transparent 58%),
+    radial-gradient(40rem 40rem at 50% 118%,rgba(91,110,245,.12),transparent 60%);
+  background-attachment:fixed;
+}
+.wrap{max-width:74rem;margin:0 auto;padding:var(--space-7) var(--space-5) 6rem;}
+
+/* ===== היררכיית טיפוגרפיה ===== */
+h1,h2,h3,h4{font-family:var(--font-display);color:var(--text);margin:0;}
+.t-display{font-size:clamp(2.75rem,6vw,4.5rem);font-weight:700;line-height:1.05;letter-spacing:-.02em;}
+.t-h1{font-size:clamp(2rem,4vw,2.75rem);font-weight:700;line-height:1.1;letter-spacing:-.015em;}
+.t-h2{font-size:clamp(1.6rem,3vw,2.1rem);font-weight:700;line-height:1.15;letter-spacing:-.01em;}
+.t-h3{font-size:1.25rem;font-weight:600;line-height:1.25;}
+.t-body-lg{font-family:var(--font-body);font-size:1.125rem;font-weight:400;line-height:1.65;color:var(--text-body);}
+.t-body{font-family:var(--font-body);font-size:1rem;font-weight:400;color:var(--text-body);}
+.t-caption{font-family:var(--font-body);font-size:.85rem;font-weight:400;color:var(--text-muted);}
+
+.eyebrow{
+  display:inline-block;font-family:var(--font-display);font-size:.8rem;font-weight:600;
+  letter-spacing:.08em; margin-bottom:.6rem;
+  background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.grad-text{background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;}
+
+/* ===== שלד המדריך ===== */
+.page-head{margin-bottom:var(--space-7);}
+.page-head .sub{max-width:40rem;margin-top:.75rem;}
+section.block{margin-top:4rem;}
+section.block > .block-title{
+  font-family:var(--font-display);font-size:1.35rem;font-weight:700;color:var(--text);
+  padding-bottom:.6rem;margin-bottom:var(--space-5);
+  border-bottom:1px solid var(--border);
+}
+section.block > .block-title span{color:var(--violet);font-weight:600;font-size:.9rem;margin-inline-start:.5rem;}
+.card-note{font-family:var(--font-body);font-size:.8rem;color:var(--text-muted);margin-top:.4rem;}
+
+/* צבעים */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(9rem,1fr));gap:var(--space-4);}
+.swatch{border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;background:var(--surface);}
+.swatch .chip{height:5rem;}
+.swatch .meta{padding:.6rem .7rem;}
+.swatch .meta b{font-family:var(--font-display);font-weight:600;color:var(--text);font-size:.85rem;display:block;}
+.swatch .meta code{font-size:.72rem;color:var(--text-muted);}
+
+/* מפרט טיפוגרפיה */
+.type-spec{display:flex;flex-direction:column;gap:var(--space-5);}
+.type-row{display:grid;grid-template-columns:8rem 1fr;gap:var(--space-5);align-items:baseline;border-bottom:1px dashed var(--border);padding-bottom:var(--space-5);}
+.type-row .label{font-family:var(--font-body);font-size:.78rem;color:var(--text-muted);line-height:1.5;}
+.type-row .label b{display:block;color:var(--violet);font-family:var(--font-display);font-weight:600;font-size:.9rem;}
+
+/* כפתורים */
+.btn{font-family:var(--font-display);font-weight:600;font-size:.95rem;cursor:pointer;border:1px solid transparent;
+  border-radius:var(--r-pill);padding:.7rem 1.4rem;display:inline-flex;align-items:center;gap:.5rem;
+  transition:transform .2s var(--ease),box-shadow .2s,border-color .2s,background .2s;}
+.btn-primary{color:#fff;background:var(--gradient);box-shadow:var(--glow);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px -10px rgba(139,92,246,.6);}
+.btn-ghost{color:var(--text);background:transparent;border-color:var(--border-strong);}
+.btn-ghost:hover{border-color:var(--violet);color:#fff;}
+.btn-icon{width:3rem;height:3rem;border-radius:50%;padding:0;justify-content:center;color:#fff;
+  background:var(--surface-2);border:1px solid var(--border-strong);font-size:1.1rem;}
+.btn-icon:hover{border-color:var(--violet);}
+.row{display:flex;gap:var(--space-4);flex-wrap:wrap;align-items:center;}
+
+/* תגי אייקון */
+.icon-badge{width:3.2rem;height:3.2rem;border-radius:14px;background:var(--gradient);
+  display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:var(--glow);}
+.icon-badge svg{width:1.5rem;height:1.5rem;}
+
+/* תגים */
+.badge{display:inline-block;font-family:var(--font-display);font-size:.72rem;font-weight:600;letter-spacing:.03em;
+  padding:.28rem .8rem;border-radius:var(--r-pill);background:var(--gradient-soft);color:var(--text);
+  border:1px solid var(--border);}
+
+/* גריד רכיבים */
+.grid{display:grid;gap:var(--space-4);}
+.grid-4{grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));}
+.grid-3{grid-template-columns:repeat(auto-fill,minmax(17rem,1fr));}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--space-5);box-shadow:var(--shadow-card);}
+.card h3{margin:.9rem 0 .4rem;}
+.card .learn{display:inline-flex;align-items:center;gap:.35rem;margin-top:.9rem;font-family:var(--font-display);
+  font-weight:600;font-size:.85rem;background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;}
+
+/* כרטיס פרויקט */
+.project .thumb{height:8rem;border-radius:var(--r-md);background:var(--gradient);opacity:.9;margin-bottom:.9rem;
+  display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.85);}
+.project h3{margin:.5rem 0 .2rem;}
+
+/* המלצה */
+.testi .mark{font-family:var(--font-display);font-size:3rem;line-height:.6;font-weight:800;
+  background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.testi .who{display:flex;align-items:center;gap:.7rem;margin-top:var(--space-4);}
+.testi .who .av{width:2.6rem;height:2.6rem;border-radius:50%;background:var(--gradient);flex:none;}
+.testi .who b{font-family:var(--font-display);color:var(--text);font-weight:600;font-size:.9rem;display:block;}
+.testi .who span{font-size:.78rem;color:var(--text-muted);}
+
+/* פס סטטיסטיקות */
+.stats-bar{background:var(--gradient);border-radius:var(--r-xl);padding:var(--space-6) var(--space-5);
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:var(--space-5);box-shadow:var(--glow);}
+.stat{color:#fff;text-align:center;}
+.stat b{font-family:var(--font-display);font-size:clamp(1.75rem,3vw,2.25rem);font-weight:700;display:block;line-height:1;}
+.stat span{font-size:.82rem;opacity:.9;}
+
+/* פריטי ניווט */
+.nav-demo{display:flex;flex-direction:column;gap:.3rem;max-width:15rem;}
+.nav-item{display:flex;align-items:center;gap:.8rem;padding:.7rem .9rem;border-radius:var(--r-md);
+  color:var(--text-body);font-weight:500;cursor:pointer;position:relative;}
+.nav-item:hover{background:var(--surface-2);color:var(--text);}
+.nav-item.active{background:var(--gradient-soft);color:var(--text);}
+.nav-item.active::before{content:'';position:absolute;inset-inline-start:0;top:20%;bottom:20%;width:3px;
+  border-radius:3px;background:var(--gradient);}
+.nav-item .dot{width:1.4rem;height:1.4rem;border-radius:6px;background:var(--surface-3);flex:none;
+  display:flex;align-items:center;justify-content:center;}
+
+/* טופס */
+.form-demo{display:grid;gap:var(--space-4);max-width:26rem;}
+.field label{display:block;font-family:var(--font-body);font-size:.82rem;color:var(--text-body);margin-bottom:.35rem;}
+.field input,.field textarea{width:100%;font:inherit;color:var(--text);background:var(--surface-2);
+  border:1px solid var(--border);border-radius:var(--r-md);padding:.7rem .9rem;transition:border-color .15s,box-shadow .15s;}
+.field input::placeholder,.field textarea::placeholder{color:var(--text-muted);}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--violet);box-shadow:0 0 0 3px rgba(139,92,246,.2);}
+
+/* מרווחים ורדיוסים */
+.scale-row{display:flex;gap:var(--space-4);flex-wrap:wrap;align-items:flex-end;}
+.scale-item{text-align:center;}
+.scale-item .box{background:var(--gradient-soft);border:1px solid var(--border-strong);border-radius:var(--r-sm);}
+.scale-item code{font-size:.72rem;color:var(--text-muted);display:block;margin-top:.3rem;}
+.radius-item .box{width:5rem;height:3.5rem;background:var(--gradient);}
+
+svg.i{width:1.4rem;height:1.4rem;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+@media(max-width:40rem){.type-row{grid-template-columns:1fr;gap:.5rem;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- כותרת -->
+  <header class="page-head">
+    <span class="eyebrow">Design System · מדריך סגנון חי</span>
+    <h1 class="t-display">Aurora <span class="grad-text">UI</span></h1>
+    <p class="t-body-lg sub">ערכת עיצוב כהה עם חתימת גרדיאנט ורוד→סגול→כחול, שחולצה מעמוד פורטפוליו. כל הרכיבים והטוקנים במקום אחד — מותאמים לעברית עם הפונטים <b style="color:var(--text)">Rubik</b> ו-<b style="color:var(--text)">Assistant</b>.</p>
+  </header>
+
+  <!-- צבעים -->
+  <section class="block">
+    <div class="block-title">צבעים <span>Color Tokens</span></div>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#0b0a12"></div><div class="meta"><b>bg</b><code>#0b0a12</code></div></div>
+      <div class="swatch"><div class="chip" style="background:#16141f"></div><div class="meta"><b>surface</b><code>#16141f</code></div></div>
+      <div class="swatch"><div class="chip" style="background:#1e1b2b"></div><div class="meta"><b>surface-2</b><code>#1e1b2b</code></div></div>
+      <div class="swatch"><div class="chip" style="background:#f6f5fb"></div><div class="meta"><b>text</b><code>#f6f5fb</code></div></div>
+      <div class="swatch"><div class="chip" style="background:#b7b3c9"></div><div class="meta"><b>text-body</b><code>#b7b3c9</code></div></div>
+      <div class="swatch"><div class="chip" style="background:#89849c"></div><div class="meta"><b>text-muted</b><code>#89849c</code></div></div>
+      <div class="swatch"><div class="chip" style="background:#ec4899"></div><div class="meta"><b>pink</b><code>#ec4899</code></div></div>
+      <div class="swatch"><div class="chip" style="background:#8b5cf6"></div><div class="meta"><b>violet</b><code>#8b5cf6</code></div></div>
+      <div class="swatch"><div class="chip" style="background:#5b6ef5"></div><div class="meta"><b>blue</b><code>#5b6ef5</code></div></div>
+      <div class="swatch"><div class="chip" style="background:linear-gradient(135deg,#ec4899,#8b5cf6,#5b6ef5)"></div><div class="meta"><b>gradient</b><code>135° pink→violet→blue</code></div></div>
+    </div>
+  </section>
+
+  <!-- טיפוגרפיה -->
+  <section class="block">
+    <div class="block-title">טיפוגרפיה <span>Rubik + Assistant</span></div>
+    <div class="type-spec">
+      <div class="type-row"><div class="label"><b>Display</b>Rubik 700<br>clamp 2.75–4.5rem</div><div class="t-display">מעצבים חוויות</div></div>
+      <div class="type-row"><div class="label"><b>H1</b>Rubik 700<br>clamp 2–2.75rem</div><div class="t-h1">כותרת ראשית לעמוד</div></div>
+      <div class="type-row"><div class="label"><b>H2</b>Rubik 700<br>clamp 1.6–2.1rem</div><div class="t-h2">כותרת מקטע בעמוד</div></div>
+      <div class="type-row"><div class="label"><b>H3</b>Rubik 600<br>1.25rem</div><div class="t-h3">כותרת של כרטיס</div></div>
+      <div class="type-row"><div class="label"><b>Eyebrow</b>Rubik 600<br>0.8rem · גרדיאנט</div><div><span class="eyebrow">מה שאני עושה</span></div></div>
+      <div class="type-row"><div class="label"><b>Body Large</b>Assistant 400<br>1.125rem</div><div class="t-body-lg">פסקת פתיחה גדולה יותר, לטקסט מוביל מתחת לכותרת — קריאה ונעימה לאורך שורות ארוכות.</div></div>
+      <div class="type-row"><div class="label"><b>Body</b>Assistant 400<br>1rem</div><div class="t-body">גוף הטקסט הרגיל של המערכת. Assistant נבחר בזכות קריאוּת גבוהה במיוחד בעברית, גם בגדלים קטנים ובפסקאות ארוכות.</div></div>
+      <div class="type-row"><div class="label"><b>Caption</b>Assistant 400<br>0.85rem</div><div class="t-caption">כיתוב משני, מטא-דאטה והערות קטנות.</div></div>
+      <div class="type-row"><div class="label"><b>Button</b>Rubik 600<br>0.95rem</div><div><button class="btn btn-primary">שלח הודעה</button></div></div>
+      <div class="type-row"><div class="label"><b>Badge</b>Rubik 600<br>0.72rem</div><div><span class="badge">Website</span></div></div>
+    </div>
+  </section>
+
+  <!-- כפתורים -->
+  <section class="block">
+    <div class="block-title">כפתורים <span>Buttons</span></div>
+    <div class="row">
+      <button class="btn btn-primary">צפו בעבודות <svg class="i" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+      <button class="btn btn-ghost">כל הפרויקטים</button>
+      <button class="btn btn-icon" aria-label="נגן">▶</button>
+      <span class="badge">Primary · Gradient</span>
+    </div>
+  </section>
+
+  <!-- תגי אייקון -->
+  <section class="block">
+    <div class="block-title">תגי אייקון <span>Icon Badges</span></div>
+    <div class="row">
+      <div class="icon-badge"><svg class="i" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+      <div class="icon-badge"><svg class="i" viewBox="0 0 24 24"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></div>
+      <div class="icon-badge"><svg class="i" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+      <div class="icon-badge"><svg class="i" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91 0zM12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></div>
+    </div>
+  </section>
+
+  <!-- כרטיסי שירות -->
+  <section class="block">
+    <div class="block-title">כרטיסי שירות <span>Service Cards</span></div>
+    <div class="grid grid-4">
+      <div class="card">
+        <div class="icon-badge"><svg class="i" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91 0zM12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></div>
+        <h3 class="t-h3">עיצוב חוויית משתמש</h3>
+        <p class="t-caption">עיצוב ממשקים אינטואיטיביים ומרתקים שמניבים תוצאות אמיתיות.</p>
+        <a class="learn">עוד <svg class="i" viewBox="0 0 24 24" style="width:1rem;height:1rem"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></a>
+      </div>
+      <div class="card">
+        <div class="icon-badge"><svg class="i" viewBox="0 0 24 24"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></div>
+        <h3 class="t-h3">פיתוח אתרים</h3>
+        <p class="t-caption">בניית אתרים מהירים ורספונסיביים עם קוד נקי ומודרני.</p>
+        <a class="learn">עוד <svg class="i" viewBox="0 0 24 24" style="width:1rem;height:1rem"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></a>
+      </div>
+      <div class="card">
+        <div class="icon-badge"><svg class="i" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+        <h3 class="t-h3">עיצוב מובייל</h3>
+        <p class="t-caption">יצירת אפליקציות מובייל יפות ושמישות שנעים להשתמש בהן.</p>
+        <a class="learn">עוד <svg class="i" viewBox="0 0 24 24" style="width:1rem;height:1rem"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></a>
+      </div>
+      <div class="card">
+        <div class="icon-badge"><svg class="i" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <h3 class="t-h3">זהות מותג</h3>
+        <p class="t-caption">בניית זהות מותג ייחודית שבולטת ומספרת סיפור.</p>
+        <a class="learn">עוד <svg class="i" viewBox="0 0 24 24" style="width:1rem;height:1rem"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- כרטיסי פרויקט -->
+  <section class="block">
+    <div class="block-title">כרטיסי פרויקט <span>Project Cards</span></div>
+    <div class="grid grid-4">
+      <div class="card project"><div class="thumb">◧</div><span class="badge">Dashboard</span><h3 class="t-h3">לוח אנליטיקה</h3><p class="t-caption">עיצוב חוויית משתמש</p></div>
+      <div class="card project"><div class="thumb">▤</div><span class="badge">Website</span><h3 class="t-h3">דף נחיתה SaaS</h3><p class="t-caption">עיצוב חוויית משתמש</p></div>
+      <div class="card project"><div class="thumb">▥</div><span class="badge">Mobile App</span><h3 class="t-h3">אפליקציית משימות</h3><p class="t-caption">עיצוב חוויית משתמש</p></div>
+      <div class="card project"><div class="thumb">▦</div><span class="badge">Website</span><h3 class="t-h3">אתר מסחר</h3><p class="t-caption">עיצוב חוויית משתמש</p></div>
+    </div>
+  </section>
+
+  <!-- פס סטטיסטיקות -->
+  <section class="block">
+    <div class="block-title">פס סטטיסטיקות <span>Stats Bar</span></div>
+    <div class="stats-bar">
+      <div class="stat"><b>+80</b><span>לקוחות מרוצים</span></div>
+      <div class="stat"><b>+120</b><span>פרויקטים הושלמו</span></div>
+      <div class="stat"><b>+5</b><span>שנות ניסיון</span></div>
+      <div class="stat"><b>+15</b><span>פרסים שהתקבלו</span></div>
+    </div>
+  </section>
+
+  <!-- המלצות -->
+  <section class="block">
+    <div class="block-title">כרטיסי המלצה <span>Testimonials</span></div>
+    <div class="grid grid-3">
+      <div class="card testi"><div class="mark">"</div><p class="t-body">מעצב פנטסטי. הבין את הדרישות שלנו במדויק וסיפק הרבה מעבר לציפיות.</p><div class="who"><span class="av"></span><span><b>שרה כהן</b><span>מנכ״לית, TechCorp</span></span></div></div>
+      <div class="card testi"><div class="mark">"</div><p class="t-body">מקצועי, יצירתי ומיומן מאוד. בהחלט נעבוד איתו שוב בעתיד.</p><div class="who"><span class="av"></span><span><b>דוד בראון</b><span>מייסד, DevStudio</span></span></div></div>
+      <div class="card testi"><div class="mark">"</div><p class="t-body">תקשורת מצוינת ותשומת לב מדהימה לפרטים. ממליץ בחום.</p><div class="who"><span class="av"></span><span><b>אמילי לוי</b><span>מנהלת מוצר</span></span></div></div>
+    </div>
+  </section>
+
+  <!-- ניווט + טופס -->
+  <section class="block">
+    <div class="block-title">ניווט וטופס <span>Nav · Form</span></div>
+    <div class="grid grid-3" style="align-items:start">
+      <nav class="nav-demo">
+        <div class="nav-item active"><span class="dot"><svg class="i" viewBox="0 0 24 24" style="width:.9rem;height:.9rem"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg></span>בית</div>
+        <div class="nav-item"><span class="dot"><svg class="i" viewBox="0 0 24 24" style="width:.9rem;height:.9rem"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>אודות</div>
+        <div class="nav-item"><span class="dot"><svg class="i" viewBox="0 0 24 24" style="width:.9rem;height:.9rem"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></span>שירותים</div>
+        <div class="nav-item"><span class="dot"><svg class="i" viewBox="0 0 24 24" style="width:.9rem;height:.9rem"><path d="M3 7h6l2 2h10v10H3z"/></svg></span>תיק עבודות</div>
+      </nav>
+      <form class="form-demo" onsubmit="return false">
+        <div class="field"><label>השם שלך</label><input type="text" placeholder="ישראל ישראלי"></div>
+        <div class="field"><label>אימייל</label><input type="email" placeholder="name@example.com"></div>
+        <div class="field"><label>הודעה</label><textarea rows="3" placeholder="ספרו לי על הפרויקט…"></textarea></div>
+        <button class="btn btn-primary" style="justify-content:center">שליחת הודעה <svg class="i" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
+      </form>
+    </div>
+  </section>
+
+  <!-- מרווחים ורדיוסים -->
+  <section class="block">
+    <div class="block-title">מרווחים ורדיוסים <span>Spacing · Radius</span></div>
+    <div class="scale-row" style="margin-bottom:var(--space-6)">
+      <div class="scale-item"><div class="box" style="width:16px;height:16px"></div><code>16</code></div>
+      <div class="scale-item"><div class="box" style="width:24px;height:24px"></div><code>24</code></div>
+      <div class="scale-item"><div class="box" style="width:32px;height:32px"></div><code>32</code></div>
+      <div class="scale-item"><div class="box" style="width:48px;height:48px"></div><code>48</code></div>
+      <div class="scale-item"><div class="box" style="width:64px;height:64px"></div><code>64</code></div>
+    </div>
+    <div class="scale-row">
+      <div class="scale-item radius-item"><div class="box" style="border-radius:8px"></div><code>sm 8</code></div>
+      <div class="scale-item radius-item"><div class="box" style="border-radius:12px"></div><code>md 12</code></div>
+      <div class="scale-item radius-item"><div class="box" style="border-radius:16px"></div><code>lg 16</code></div>
+      <div class="scale-item radius-item"><div class="box" style="border-radius:22px"></div><code>xl 22</code></div>
+      <div class="scale-item radius-item"><div class="box" style="border-radius:999px"></div><code>pill</code></div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
