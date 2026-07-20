@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#14181f">
+  <meta name="color-scheme" content="dark">
   <title>המחברת — סיכומי הרצאות</title>
   <meta name="description" content="אתר אישי לסיכומי הרצאות: תמלול כתב יד, הרעיון הכללי, ההיגיון ושיטות הפתרון — לכל שיעור.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%92%3C/text%3E%3C/svg%3E">
@@ -19,9 +21,12 @@
         <span class="brand-sub">סיכומי הרצאות · אף שיעור לא הולך לאיבוד</span>
       </span>
     </a>
-    <form class="search-form" id="search-form" role="search">
-      <input type="search" id="search-input" placeholder="חיפוש בכל הסיכומים…" aria-label="חיפוש בכל הסיכומים" autocomplete="off">
-    </form>
+    <div class="header-tools">
+      <form class="search-form" id="search-form" role="search">
+        <input type="search" id="search-input" placeholder="חיפוש בכל הסיכומים…" aria-label="חיפוש בכל הסיכומים" autocomplete="off">
+      </form>
+      <a class="studio-link" href="#/studio">＋ סטודיו</a>
+    </div>
   </header>
 
   <main id="app" aria-live="polite"></main>
