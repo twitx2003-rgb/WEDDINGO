@@ -1,115 +1,164 @@
 /* ============================================================
-   המחברת — שפה עיצובית "מחברת מודרנית"
-   נייר חם + דיו כהה + טרקוטה. בנוי לקריאה ארוכה בעברית.
+   המחברת — שפה עיצובית "Aurora"
+   כהה + גרדיאנט ורוד→סגול→כחול. Rubik + Assistant. RTL.
    כל הטוקנים חיים כאן, ב-:root בלבד.
    ============================================================ */
 
 /* ---------- פונטים (vendored, ללא CDN) ---------- */
 @font-face {
-  font-family: 'Frank Ruhl Libre';
-  src: url('fonts/frank-ruhl-libre-hebrew-500-normal.woff2') format('woff2');
-  font-weight: 500; font-style: normal; font-display: swap;
-  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
-}
-@font-face {
-  font-family: 'Frank Ruhl Libre';
-  src: url('fonts/frank-ruhl-libre-latin-500-normal.woff2') format('woff2');
-  font-weight: 500; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'Frank Ruhl Libre';
-  src: url('fonts/frank-ruhl-libre-hebrew-700-normal.woff2') format('woff2');
-  font-weight: 700; font-style: normal; font-display: swap;
-  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
-}
-@font-face {
-  font-family: 'Frank Ruhl Libre';
-  src: url('fonts/frank-ruhl-libre-latin-700-normal.woff2') format('woff2');
-  font-weight: 700; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'Frank Ruhl Libre';
-  src: url('fonts/frank-ruhl-libre-hebrew-900-normal.woff2') format('woff2');
-  font-weight: 900; font-style: normal; font-display: swap;
-  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
-}
-@font-face {
-  font-family: 'Frank Ruhl Libre';
-  src: url('fonts/frank-ruhl-libre-latin-900-normal.woff2') format('woff2');
-  font-weight: 900; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'Heebo';
-  src: url('fonts/heebo-hebrew-400-normal.woff2') format('woff2');
+  font-family: 'Rubik';
+  src: url('fonts/rubik-hebrew-400-normal.woff2') format('woff2');
   font-weight: 400; font-style: normal; font-display: swap;
   unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
 }
 @font-face {
-  font-family: 'Heebo';
-  src: url('fonts/heebo-latin-400-normal.woff2') format('woff2');
+  font-family: 'Rubik';
+  src: url('fonts/rubik-latin-400-normal.woff2') format('woff2');
   font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
-  font-family: 'Heebo';
-  src: url('fonts/heebo-hebrew-500-normal.woff2') format('woff2');
+  font-family: 'Rubik';
+  src: url('fonts/rubik-hebrew-500-normal.woff2') format('woff2');
   font-weight: 500; font-style: normal; font-display: swap;
   unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
 }
 @font-face {
-  font-family: 'Heebo';
-  src: url('fonts/heebo-latin-500-normal.woff2') format('woff2');
+  font-family: 'Rubik';
+  src: url('fonts/rubik-latin-500-normal.woff2') format('woff2');
   font-weight: 500; font-style: normal; font-display: swap;
 }
 @font-face {
-  font-family: 'Heebo';
-  src: url('fonts/heebo-hebrew-700-normal.woff2') format('woff2');
+  font-family: 'Rubik';
+  src: url('fonts/rubik-hebrew-600-normal.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: swap;
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Rubik';
+  src: url('fonts/rubik-latin-600-normal.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Rubik';
+  src: url('fonts/rubik-hebrew-700-normal.woff2') format('woff2');
   font-weight: 700; font-style: normal; font-display: swap;
   unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
 }
 @font-face {
-  font-family: 'Heebo';
-  src: url('fonts/heebo-latin-700-normal.woff2') format('woff2');
+  font-family: 'Rubik';
+  src: url('fonts/rubik-latin-700-normal.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Rubik';
+  src: url('fonts/rubik-hebrew-800-normal.woff2') format('woff2');
+  font-weight: 800; font-style: normal; font-display: swap;
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Rubik';
+  src: url('fonts/rubik-latin-800-normal.woff2') format('woff2');
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Rubik';
+  src: url('fonts/rubik-hebrew-900-normal.woff2') format('woff2');
+  font-weight: 900; font-style: normal; font-display: swap;
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Rubik';
+  src: url('fonts/rubik-latin-900-normal.woff2') format('woff2');
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Assistant';
+  src: url('fonts/assistant-hebrew-400-normal.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Assistant';
+  src: url('fonts/assistant-latin-400-normal.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Assistant';
+  src: url('fonts/assistant-hebrew-500-normal.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Assistant';
+  src: url('fonts/assistant-latin-500-normal.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Assistant';
+  src: url('fonts/assistant-hebrew-600-normal.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: swap;
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Assistant';
+  src: url('fonts/assistant-latin-600-normal.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Assistant';
+  src: url('fonts/assistant-hebrew-700-normal.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Assistant';
+  src: url('fonts/assistant-latin-700-normal.woff2') format('woff2');
   font-weight: 700; font-style: normal; font-display: swap;
 }
 
-/* ---------- טוקנים — ערכת "ליל למידה" (כהה) ---------- */
+/* ---------- טוקנים — ערכת "Aurora" (כהה + גרדיאנט) ---------- */
 :root {
-  /* דיו לילה ושמנת */
-  --bg: #14181f;
-  --surface: #1c222e;
-  --surface-raised: #232b3a;
-  --ink: #ece5d8;
-  --ink-soft: #b9b2a3;
-  --muted: #857f70;
-  --line: rgba(234, 227, 214, .10);
-  --line-strong: rgba(234, 227, 214, .20);
+  /* דיו לילה סגלגל ומשטחים */
+  --bg: #0b0a12;
+  --surface: #16141f;
+  --surface-raised: #1e1b2b;
+  --ink: #f6f5fb;
+  --ink-soft: #b7b3c9;
+  --muted: #89849c;
+  --line: rgba(255, 255, 255, .07);
+  --line-strong: rgba(255, 255, 255, .13);
 
-  /* אקצנט ראשי — זהב-ענבר */
-  --accent: #e0a94e;
-  --accent-deep: #f0be6a;   /* בהיר יותר — לקישורים על רקע כהה */
-  --accent-wash: rgba(224, 169, 78, .14);
+  /* אקצנט ראשי — סגול, + חתימת הגרדיאנט */
+  --accent: #8b5cf6;
+  --accent-deep: #a78bfa;   /* בהיר יותר — לקישורים על רקע כהה */
+  --accent-wash: rgba(139, 92, 246, .15);
+  --pink: #ec4899;
+  --violet: #8b5cf6;
+  --blue: #5b6ef5;
+  --gradient: linear-gradient(135deg, #ec4899 0%, #8b5cf6 52%, #5b6ef5 100%);
+  --gradient-soft: linear-gradient(135deg, rgba(236,72,153,.16), rgba(139,92,246,.16), rgba(91,110,245,.16));
 
   /* צבעי קורסים a–f — זוהרים על כהה */
-  --course-a: #e0a94e;  /* ענבר */
-  --course-b: #5cc9a0;  /* מנטה */
-  --course-c: #6aa8e8;  /* תכלת */
-  --course-d: #c88fd6;  /* סחלב */
-  --course-e: #e0895c;  /* טרקוטה */
-  --course-f: #8f9cf0;  /* פריכלת */
+  --course-a: #8b5cf6;  /* סגול */
+  --course-b: #ec4899;  /* ורוד */
+  --course-c: #5b6ef5;  /* כחול */
+  --course-d: #22d3ee;  /* טורקיז */
+  --course-e: #f59e0b;  /* ענבר */
+  --course-f: #34d399;  /* אמרלד */
 
   /* סטטוסים */
-  --ok: #5cc9a0;
-  --warn: #e0a94e;
-  --gap: #e8785c;
+  --ok: #34d399;
+  --warn: #f59e0b;
+  --gap: #ec4899;
 
   /* טיפוגרפיה */
-  --font-display: 'Frank Ruhl Libre', 'Times New Roman', serif;
-  --font-body: 'Heebo', -apple-system, 'Segoe UI', sans-serif;
-  --size-hero: clamp(2.4rem, 6vw, 4.2rem);
-  --size-h1: clamp(1.9rem, 4.5vw, 3rem);
+  --font-display: 'Rubik', 'Poppins', system-ui, sans-serif;
+  --font-body: 'Assistant', system-ui, sans-serif;
+  --size-hero: clamp(2.6rem, 6vw, 4.5rem);
+  --size-h1: clamp(1.9rem, 4.5vw, 2.9rem);
   --size-h2: clamp(1.35rem, 2.6vw, 1.7rem);
   --size-body: 1.0625rem;
-  --leading-read: 1.85;
+  --leading-read: 1.8;
 
   /* מקצב */
   --space-1: .5rem;
@@ -138,11 +187,11 @@ body {
   font-size: var(--size-body);
   line-height: var(--leading-read);
   -webkit-font-smoothing: antialiased;
-  /* אווירת לילה: הילות חמות עמומות על רקע כהה, לא צבע שטוח */
+  /* אווירת Aurora: הילות גרדיאנט עמומות על רקע כהה, לא צבע שטוח */
   background-image:
-    radial-gradient(60rem 42rem at 85% -12%, rgba(224, 169, 78, .10), transparent 60%),
-    radial-gradient(52rem 38rem at -12% 28%, rgba(106, 168, 232, .07), transparent 58%),
-    radial-gradient(40rem 40rem at 50% 120%, rgba(92, 201, 160, .05), transparent 60%);
+    radial-gradient(58rem 40rem at 88% -10%, rgba(139, 92, 246, .16), transparent 60%),
+    radial-gradient(50rem 34rem at -10% 22%, rgba(236, 72, 153, .12), transparent 58%),
+    radial-gradient(44rem 44rem at 50% 120%, rgba(91, 110, 245, .12), transparent 60%);
   background-attachment: fixed;
 }
 
@@ -151,7 +200,7 @@ a { color: var(--accent-deep); text-decoration: none; }
 a:hover { text-decoration: underline; text-underline-offset: 3px; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
 
-::selection { background: var(--accent); color: #14181f; }
+::selection { background: var(--violet); color: #fff; }
 
 /* ---------- כותרת האתר ---------- */
 .site-header {
@@ -172,10 +221,9 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .brand-mark {
   width: 30px; height: 44px;
   border-radius: 5px 2px 2px 5px;
-  background:
-    linear-gradient(180deg, var(--accent) 0%, var(--accent-deep) 100%);
+  background: var(--gradient);
   position: relative;
-  box-shadow: inset -8px 0 0 -5px rgba(255, 252, 245, .55);
+  box-shadow: inset -8px 0 0 -5px rgba(255, 255, 255, .55);
 }
 .brand-mark::after {
   content: '';
@@ -205,18 +253,18 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
   gap: .3rem;
   font-weight: 700;
   font-size: .9rem;
-  color: #14181f;
-  background: linear-gradient(180deg, var(--accent), var(--accent-deep));
+  color: #fff;
+  background: var(--gradient);
   border-radius: 999px;
   padding: .55rem 1.1rem;
   white-space: nowrap;
-  box-shadow: 0 0 0 1px rgba(224,169,78,.3), 0 8px 20px -8px rgba(224,169,78,.5);
+  box-shadow: 0 0 0 1px rgba(139,92,246,.3), 0 8px 20px -8px rgba(139,92,246,.55);
   transition: transform .2s var(--ease-out), box-shadow .2s;
 }
 .studio-link:hover {
   text-decoration: none;
   transform: translateY(-2px);
-  box-shadow: 0 0 0 1px rgba(224,169,78,.5), 0 12px 26px -8px rgba(224,169,78,.65);
+  box-shadow: 0 0 0 1px rgba(139,92,246,.5), 0 14px 30px -8px rgba(139,92,246,.7);
 }
 #search-input {
   width: 100%;
@@ -296,7 +344,10 @@ main {
 }
 .hero h1 em {
   font-style: normal;
-  color: var(--accent);
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   position: relative;
 }
 .hero p { color: var(--ink-soft); font-size: 1.1rem; margin: 0; }
@@ -826,11 +877,11 @@ mark { background: color-mix(in srgb, var(--warn) 30%, transparent); color: inhe
   transition: transform .15s var(--ease-out), box-shadow .15s, background .15s, border-color .15s;
 }
 .btn-primary {
-  color: #14181f;
-  background: linear-gradient(180deg, var(--accent), var(--accent-deep));
-  box-shadow: 0 8px 20px -8px rgba(224,169,78,.5);
+  color: #fff;
+  background: var(--gradient);
+  box-shadow: 0 8px 20px -8px rgba(139,92,246,.55);
 }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 26px -8px rgba(224,169,78,.65); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -8px rgba(139,92,246,.7); }
 .btn-primary:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
 .btn-ghost {
   color: var(--ink-soft);
