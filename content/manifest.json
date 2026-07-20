@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "updated": "2026-07-19",
+  "courses": [
+    {
+      "id": "linear-algebra-1",
+      "name": "אלגברה לינארית 1 (דמו)",
+      "semester": "סמסטר ב' תשפ\"ו",
+      "color": "a",
+      "lectures": [
+        {
+          "id": "2026-07-15-eigenvalues",
+          "title": "ערכים עצמיים ווקטורים עצמיים (דמו)",
+          "number": 9,
+          "date": "2026-07-15",
+          "status": "ready",
+          "scans": ["page-01.svg", "page-02.svg"],
+          "keywords": ["ערך עצמי", "וקטור עצמי", "פולינום אופייני", "לכסון"]
+        },
+        {
+          "id": "2026-07-22-diagonalization",
+          "title": "לכסון מטריצות",
+          "number": 10,
+          "date": "2026-07-22",
+          "status": "missing",
+          "scans": [],
+          "keywords": []
+        }
+      ]
+    }
+  ]
+}

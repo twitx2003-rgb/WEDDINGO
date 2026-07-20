@@ -1,0 +1,762 @@
+/* ============================================================
+   המחברת — שפה עיצובית "מחברת מודרנית"
+   נייר חם + דיו כהה + טרקוטה. בנוי לקריאה ארוכה בעברית.
+   כל הטוקנים חיים כאן, ב-:root בלבד.
+   ============================================================ */
+
+/* ---------- פונטים (vendored, ללא CDN) ---------- */
+@font-face {
+  font-family: 'Frank Ruhl Libre';
+  src: url('fonts/frank-ruhl-libre-hebrew-500-normal.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Frank Ruhl Libre';
+  src: url('fonts/frank-ruhl-libre-latin-500-normal.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Frank Ruhl Libre';
+  src: url('fonts/frank-ruhl-libre-hebrew-700-normal.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Frank Ruhl Libre';
+  src: url('fonts/frank-ruhl-libre-latin-700-normal.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Frank Ruhl Libre';
+  src: url('fonts/frank-ruhl-libre-hebrew-900-normal.woff2') format('woff2');
+  font-weight: 900; font-style: normal; font-display: swap;
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Frank Ruhl Libre';
+  src: url('fonts/frank-ruhl-libre-latin-900-normal.woff2') format('woff2');
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Heebo';
+  src: url('fonts/heebo-hebrew-400-normal.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Heebo';
+  src: url('fonts/heebo-latin-400-normal.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Heebo';
+  src: url('fonts/heebo-hebrew-500-normal.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Heebo';
+  src: url('fonts/heebo-latin-500-normal.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Heebo';
+  src: url('fonts/heebo-hebrew-700-normal.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Heebo';
+  src: url('fonts/heebo-latin-700-normal.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+/* ---------- טוקנים ---------- */
+:root {
+  /* נייר ודיו */
+  --bg: #f7f2e9;
+  --surface: #fffcf5;
+  --surface-raised: #fffef9;
+  --ink: #2b2118;
+  --ink-soft: #56493c;
+  --muted: #8b7d6b;
+  --line: #e3d9c6;
+  --line-strong: #cfc2a9;
+
+  /* אקצנט ראשי — טרקוטה */
+  --accent: #b0512e;
+  --accent-deep: #8f3f22;
+  --accent-wash: #f6e5db;
+
+  /* צבעי קורסים a–f */
+  --course-a: #b0512e;  /* טרקוטה */
+  --course-b: #3d6b54;  /* ירוק יער */
+  --course-c: #39597f;  /* כחול צפחה */
+  --course-d: #7d5378;  /* שזיף */
+  --course-e: #9c6b1f;  /* אוקר */
+  --course-f: #56598f;  /* אינדיגו רך */
+
+  /* סטטוסים */
+  --ok: #3d6b54;
+  --warn: #9c6b1f;
+  --gap: #a4452f;
+
+  /* טיפוגרפיה */
+  --font-display: 'Frank Ruhl Libre', 'Times New Roman', serif;
+  --font-body: 'Heebo', -apple-system, 'Segoe UI', sans-serif;
+  --size-hero: clamp(2.4rem, 6vw, 4.2rem);
+  --size-h1: clamp(1.9rem, 4.5vw, 3rem);
+  --size-h2: clamp(1.35rem, 2.6vw, 1.7rem);
+  --size-body: 1.0625rem;
+  --leading-read: 1.85;
+
+  /* מקצב */
+  --space-1: .5rem;
+  --space-2: 1rem;
+  --space-3: 1.75rem;
+  --space-4: 3rem;
+  --space-5: 5rem;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --content-width: 46rem;
+  --wide-width: 72rem;
+  --shadow-soft: 0 1px 2px rgba(43, 33, 24, .05), 0 6px 24px -8px rgba(43, 33, 24, .12);
+  --ease-out: cubic-bezier(.22, .8, .36, 1);
+}
+
+/* ---------- בסיס ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--size-body);
+  line-height: var(--leading-read);
+  -webkit-font-smoothing: antialiased;
+  /* אווירת נייר: הילות חמות עדינות + מרקם, לא צבע שטוח */
+  background-image:
+    radial-gradient(60rem 40rem at 85% -10%, rgba(176, 81, 46, .06), transparent 60%),
+    radial-gradient(50rem 35rem at -10% 30%, rgba(61, 107, 84, .05), transparent 55%),
+    repeating-linear-gradient(0deg, rgba(43, 33, 24, .012) 0 1px, transparent 1px 3px);
+  background-attachment: fixed;
+}
+
+img { max-width: 100%; }
+a { color: var(--accent-deep); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+::selection { background: var(--accent-wash); color: var(--accent-deep); }
+
+/* ---------- כותרת האתר ---------- */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  max-width: var(--wide-width);
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-3) var(--space-2);
+}
+
+.brand { display: flex; align-items: center; gap: .9rem; }
+.brand:hover { text-decoration: none; }
+
+/* סימן המותג: "שדרת מחברת" — שלושה פסים כמו כריכה תפורה */
+.brand-mark {
+  width: 30px; height: 44px;
+  border-radius: 5px 2px 2px 5px;
+  background:
+    linear-gradient(180deg, var(--accent) 0%, var(--accent-deep) 100%);
+  position: relative;
+  box-shadow: inset -8px 0 0 -5px rgba(255, 252, 245, .55);
+}
+.brand-mark::after {
+  content: '';
+  position: absolute;
+  inset: 8px 8px 8px 12px;
+  background: repeating-linear-gradient(0deg, rgba(255, 252, 245, .8) 0 2px, transparent 2px 8px);
+  border-radius: 1px;
+}
+
+.brand-text { display: flex; flex-direction: column; }
+.brand-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.7rem;
+  line-height: 1.1;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.brand-sub { font-size: .8rem; color: var(--muted); letter-spacing: .04em; }
+
+.search-form { flex: 1 1 16rem; max-width: 24rem; }
+#search-input {
+  width: 100%;
+  padding: .65rem 1.1rem;
+  font: inherit;
+  font-size: .95rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  transition: border-color .2s, box-shadow .2s;
+}
+#search-input::placeholder { color: var(--muted); }
+#search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-wash);
+}
+
+/* ---------- מעטפת ראשית ---------- */
+main {
+  max-width: var(--wide-width);
+  margin: 0 auto;
+  padding: var(--space-2) var(--space-3) var(--space-5);
+  min-height: 60vh;
+}
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding: var(--space-3);
+  text-align: center;
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+/* ---------- אנימציית החתימה: reveal מדורג ---------- */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+.reveal { animation: rise-in .55s var(--ease-out) both; }
+.reveal:nth-child(1)  { animation-delay: .02s; }
+.reveal:nth-child(2)  { animation-delay: .08s; }
+.reveal:nth-child(3)  { animation-delay: .14s; }
+.reveal:nth-child(4)  { animation-delay: .20s; }
+.reveal:nth-child(5)  { animation-delay: .26s; }
+.reveal:nth-child(6)  { animation-delay: .32s; }
+.reveal:nth-child(7)  { animation-delay: .38s; }
+.reveal:nth-child(8)  { animation-delay: .44s; }
+.reveal:nth-child(9)  { animation-delay: .50s; }
+.reveal:nth-child(n+10) { animation-delay: .56s; }
+
+/* ---------- עמוד הבית ---------- */
+.hero {
+  padding: var(--space-4) 0 var(--space-3);
+  max-width: 40rem;
+}
+.hero-kicker {
+  display: inline-block;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  color: var(--accent-deep);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: .2rem .9rem;
+  margin-bottom: var(--space-2);
+  background: var(--accent-wash);
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: var(--size-hero);
+  line-height: 1.12;
+  margin: 0 0 var(--space-2);
+  letter-spacing: -0.015em;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--accent);
+  position: relative;
+}
+.hero p { color: var(--ink-soft); font-size: 1.1rem; margin: 0; }
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+/* כרטיס קורס — דף מחברת עם שדרה צבעונית בצד */
+.course-card {
+  --cc: var(--accent);
+  position: relative;
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-3) var(--space-2);
+  padding-inline-start: calc(var(--space-3) + 10px);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  transition: transform .25s var(--ease-out), box-shadow .25s var(--ease-out);
+}
+.course-card::before {
+  /* השדרה */
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 10px;
+  background: linear-gradient(180deg, var(--cc), color-mix(in srgb, var(--cc) 70%, black));
+}
+.course-card:hover {
+  text-decoration: none;
+  transform: translateY(-4px);
+  box-shadow: 0 2px 3px rgba(43,33,24,.06), 0 18px 40px -14px color-mix(in srgb, var(--cc) 35%, transparent);
+}
+.course-card h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.45rem;
+  margin: 0 0 .3rem;
+  color: var(--ink);
+}
+.course-card .semester { color: var(--muted); font-size: .87rem; }
+.course-card .course-meta {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px dashed var(--line-strong);
+  font-size: .85rem;
+  color: var(--ink-soft);
+}
+.course-card .course-meta strong { color: var(--cc); font-size: 1.15rem; font-weight: 700; }
+.course-card .gap-note { color: var(--gap); font-weight: 500; }
+
+/* ---------- פירורי לחם ---------- */
+.crumbs {
+  font-size: .85rem;
+  color: var(--muted);
+  margin-bottom: var(--space-2);
+}
+.crumbs a { color: var(--muted); }
+.crumbs a:hover { color: var(--accent-deep); }
+.crumbs .sep { margin-inline: .5rem; opacity: .6; }
+
+/* ---------- עמוד קורס ---------- */
+.course-head { margin-bottom: var(--space-3); }
+.course-head h1 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: var(--size-h1);
+  margin: 0 0 .25rem;
+}
+.course-head .semester { color: var(--muted); }
+
+.lecture-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+
+.lecture-row {
+  --cc: var(--accent);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  transition: transform .2s var(--ease-out), border-color .2s;
+}
+a.lecture-row:hover { text-decoration: none; transform: translateX(-4px); border-color: var(--cc); }
+.lecture-row .num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.5rem;
+  color: var(--cc);
+  min-width: 2.2rem;
+  text-align: center;
+}
+.lecture-row .lecture-title { font-weight: 500; color: var(--ink); }
+.lecture-row .lecture-date { font-size: .82rem; color: var(--muted); }
+.lecture-row .kw { font-size: .8rem; color: var(--muted); margin-top: .15rem; }
+
+.lecture-row.is-missing {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--line-strong);
+}
+.lecture-row.is-missing .lecture-title { color: var(--muted); }
+
+.status-chip {
+  font-size: .75rem;
+  font-weight: 700;
+  padding: .18rem .7rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.status-chip.ready { color: var(--ok); background: color-mix(in srgb, var(--ok) 12%, transparent); }
+.status-chip.draft { color: var(--warn); background: color-mix(in srgb, var(--warn) 14%, transparent); }
+.status-chip.missing { color: var(--gap); background: color-mix(in srgb, var(--gap) 10%, transparent); }
+
+/* ---------- עמוד הרצאה ---------- */
+.lecture-layout {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.lecture-side {
+  position: sticky;
+  top: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.section-nav { border-inline-start: 2px solid var(--line); }
+.section-nav a {
+  display: block;
+  padding: .4rem var(--space-2);
+  margin-inline-start: -2px;
+  border-inline-start: 2px solid transparent;
+  color: var(--muted);
+  font-size: .9rem;
+  transition: color .15s, border-color .15s;
+}
+.section-nav a:hover { color: var(--ink); text-decoration: none; }
+.section-nav a.active {
+  color: var(--accent-deep);
+  font-weight: 700;
+  border-inline-start-color: var(--accent);
+}
+
+.lecture-actions { display: flex; flex-direction: column; gap: .5rem; }
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  font: inherit;
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: .5rem .9rem;
+  cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.action-btn:hover { border-color: var(--accent); color: var(--accent-deep); }
+.action-btn[aria-pressed="true"] {
+  background: var(--accent-wash);
+  border-color: var(--accent);
+  color: var(--accent-deep);
+}
+
+/* גוף ההרצאה — טור קריאה */
+.lecture-article {
+  max-width: var(--content-width);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+  position: relative;
+}
+/* קו שוליים אדמדם כמו במחברת */
+.lecture-article::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: clamp(.9rem, 2.5vw, 2.2rem);
+  width: 1px;
+  background: color-mix(in srgb, var(--gap) 25%, transparent);
+  pointer-events: none;
+}
+
+.lecture-article h1 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: var(--size-h1);
+  line-height: 1.15;
+  margin: 0 0 var(--space-2);
+}
+.lecture-article h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--size-h2);
+  margin: var(--space-4) 0 var(--space-2);
+  padding-bottom: .4rem;
+  border-bottom: 2px solid var(--line);
+  scroll-margin-top: var(--space-2);
+}
+.lecture-article h2::before {
+  content: '§';
+  color: var(--accent);
+  margin-inline-end: .5rem;
+  font-weight: 500;
+}
+.lecture-article h3 {
+  font-weight: 700;
+  font-size: 1.08rem;
+  margin: var(--space-3) 0 var(--space-1);
+  color: var(--ink);
+}
+.lecture-article p { margin: 0 0 var(--space-2); color: var(--ink-soft); }
+.lecture-article strong { color: var(--ink); }
+.lecture-article ul, .lecture-article ol { color: var(--ink-soft); padding-inline-start: 1.4rem; }
+.lecture-article li { margin-bottom: .5rem; }
+.lecture-article blockquote {
+  margin: var(--space-2) 0;
+  padding: var(--space-1) var(--space-2);
+  border-inline-start: 3px solid var(--warn);
+  background: color-mix(in srgb, var(--warn) 7%, transparent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  color: var(--ink-soft);
+  font-size: .95rem;
+}
+.lecture-article blockquote p { margin: 0; }
+.lecture-article code {
+  font-size: .9em;
+  background: var(--accent-wash);
+  padding: .1em .35em;
+  border-radius: 4px;
+}
+.lecture-article hr { border: none; border-top: 1px dashed var(--line-strong); margin: var(--space-3) 0; }
+
+/* מתמטיקה */
+.katex { font-size: 1.06em; }
+.katex-display {
+  direction: ltr;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: .35rem 0;
+  margin: var(--space-2) 0;
+}
+
+/* תמלול — מקופל כברירת מחדל */
+details.transcript {
+  margin: var(--space-2) 0 var(--space-3);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--bg) 55%, var(--surface));
+}
+details.transcript > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--size-h2);
+  color: var(--ink);
+  user-select: none;
+}
+details.transcript > summary::-webkit-details-marker { display: none; }
+details.transcript > summary::before {
+  content: '§';
+  color: var(--accent);
+  margin-inline-end: .5rem;
+  font-weight: 500;
+}
+details.transcript > summary::after {
+  content: 'להצגה ›';
+  float: inline-end;
+  font-family: var(--font-body);
+  font-size: .82rem;
+  font-weight: 500;
+  color: var(--accent-deep);
+  transition: transform .2s;
+}
+details.transcript[open] > summary::after { content: 'לכיווץ ‹'; }
+details.transcript > .transcript-body { padding: 0 var(--space-3) var(--space-2); }
+
+/* ספוילרים של פתרונות */
+.lecture-article details:not(.transcript) {
+  margin: .4rem 0 var(--space-2);
+  border-inline-start: 3px solid var(--accent);
+  background: var(--accent-wash);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: .5rem var(--space-2);
+}
+.lecture-article details:not(.transcript) > summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--accent-deep);
+  font-size: .92rem;
+}
+
+/* רצועת דפי המקור */
+.scans-strip { margin-top: var(--space-3); }
+.scans-strip h2 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--muted);
+  margin: 0 0 var(--space-1);
+}
+.scans-thumbs { display: flex; gap: var(--space-1); flex-wrap: wrap; }
+.scan-thumb {
+  width: 84px; height: 112px;
+  object-fit: cover;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  cursor: zoom-in;
+  background: white;
+  transition: transform .2s var(--ease-out), box-shadow .2s;
+}
+.scan-thumb:hover { transform: translateY(-3px) rotate(-1deg); box-shadow: var(--shadow-soft); }
+
+/* מצב "לצד המקור" */
+.lecture-layout.with-source { grid-template-columns: 15rem minmax(0, 1fr) minmax(0, 26rem); }
+.source-pane { position: sticky; top: var(--space-2); }
+.source-pane img {
+  width: 100%;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: white;
+  box-shadow: var(--shadow-soft);
+}
+.source-pane .source-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: .5rem;
+  font-size: .85rem;
+  color: var(--muted);
+}
+.source-pane .source-pager button {
+  font: inherit;
+  background: none;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  padding: .15rem .7rem;
+  cursor: pointer;
+  color: var(--ink-soft);
+}
+.source-pane .source-pager button:hover { border-color: var(--accent); color: var(--accent-deep); }
+
+/* ---------- הרצאה חסרה (placeholder) ---------- */
+.missing-view {
+  max-width: var(--content-width);
+  border: 2px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  text-align: center;
+  color: var(--ink-soft);
+}
+.missing-view h1 { font-family: var(--font-display); font-weight: 700; margin-top: 0; }
+.missing-view .hint {
+  display: inline-block;
+  margin-top: var(--space-2);
+  background: var(--accent-wash);
+  border-radius: var(--radius);
+  padding: var(--space-1) var(--space-2);
+  font-size: .92rem;
+  color: var(--accent-deep);
+}
+
+/* ---------- חיפוש ---------- */
+.search-results h1 { font-family: var(--font-display); font-weight: 900; font-size: var(--size-h1); }
+.search-results .result-course { color: var(--muted); font-size: .85rem; }
+.result-item {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-2);
+  transition: border-color .15s, transform .2s var(--ease-out);
+}
+.result-item:hover { text-decoration: none; border-color: var(--accent); transform: translateX(-4px); }
+.result-item h3 { margin: 0 0 .25rem; color: var(--ink); }
+.result-item .snippet { font-size: .9rem; color: var(--ink-soft); }
+mark { background: color-mix(in srgb, var(--warn) 30%, transparent); color: inherit; border-radius: 3px; padding: 0 .15em; }
+.no-results { color: var(--muted); text-align: center; padding: var(--space-4); }
+
+/* ---------- לייטבוקס ---------- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(30, 22, 15, .88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  animation: rise-in .2s var(--ease-out);
+}
+.lightbox[hidden] { display: none; }
+.lightbox-figure { margin: 0; max-width: min(90vw, 44rem); text-align: center; }
+.lightbox-figure img {
+  max-height: 82vh;
+  max-width: 100%;
+  border-radius: var(--radius);
+  background: white;
+}
+.lightbox-figure figcaption { color: #d8cdbb; font-size: .85rem; margin-top: .5rem; }
+.lightbox-close, .lightbox-nav {
+  font: inherit;
+  background: rgba(255, 252, 245, .1);
+  color: #f5efe2;
+  border: 1px solid rgba(255, 252, 245, .3);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.lightbox-close { position: absolute; top: 1rem; inset-inline-end: 1rem; width: 2.6rem; height: 2.6rem; font-size: 1.1rem; }
+.lightbox-nav { width: 3rem; height: 3rem; font-size: 1.6rem; flex: none; }
+.lightbox-close:hover, .lightbox-nav:hover { background: rgba(255, 252, 245, .25); }
+
+/* ---------- שגיאה ---------- */
+.error-view { text-align: center; color: var(--muted); padding: var(--space-5) 0; }
+
+/* ---------- רספונסיביות ---------- */
+@media (max-width: 64rem) {
+  .lecture-layout, .lecture-layout.with-source { grid-template-columns: 1fr; gap: var(--space-2); }
+  .lecture-side { position: static; flex-direction: row; flex-wrap: wrap; align-items: center; }
+  .section-nav { display: flex; flex-wrap: wrap; border: none; gap: .25rem; }
+  .section-nav a { border: 1px solid var(--line-strong); border-radius: 999px; padding: .25rem .8rem; font-size: .82rem; }
+  .section-nav a.active { border-color: var(--accent); background: var(--accent-wash); }
+  .lecture-actions { flex-direction: row; }
+  .source-pane { position: static; max-width: var(--content-width); margin-top: var(--space-2); }
+}
+
+@media (max-width: 40rem) {
+  .site-header { padding-inline: var(--space-2); }
+  main { padding-inline: var(--space-2); }
+  .lecture-row { grid-template-columns: auto 1fr; }
+  .lecture-row .status-chip { grid-column: 2; justify-self: start; }
+}
+
+/* ---------- תנועה מופחתת ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* ---------- הדפסה: דף הכנה למבחן ---------- */
+@media print {
+  body { background: white; font-size: 11pt; }
+  .site-header, .site-footer, .lecture-side, .scans-strip, .source-pane,
+  .crumbs, .lightbox { display: none !important; }
+  main { max-width: none; padding: 0; }
+  .lecture-layout, .lecture-layout.with-source { display: block; }
+  .lecture-article { border: none; box-shadow: none; padding: 0; max-width: none; }
+  .lecture-article::before { display: none; }
+  .lecture-article h2 { break-after: avoid; }
+  .katex-display { break-inside: avoid; }
+  details.transcript, .lecture-article details:not(.transcript) {
+    border: none; background: none; padding: 0;
+  }
+  details.transcript > summary::after { content: ''; }
+  a { color: inherit; }
+}
