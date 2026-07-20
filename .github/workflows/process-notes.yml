@@ -1,0 +1,65 @@
+name: עיבוד דפים אוטומטי (Claude)
+
+# מופעל כשמגיע job.json חדש ל-inbox/ (מהסטודיו באתר), או ידנית.
+# רק job.json מפעיל — התמונות נדחפות לפניו ולא מפעילות ריצה כפולה.
+on:
+  push:
+    branches:
+      - claude/lecture-notes-study-site-lwwsja
+      - main
+    paths:
+      - 'inbox/**/job.json'
+  workflow_dispatch:
+
+# נדרש כדי ש-Claude יוכל לדחוף את הסיכום חזרה לריפו.
+permissions:
+  contents: write
+
+# ריצה אחת בכל פעם — מונע התנגשויות אם מעלים כמה מחברות ברצף.
+concurrency:
+  group: process-notes
+  cancel-in-progress: false
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Process notes with Claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            הגיעו דפי הרצאה חדשים לעיבוד. פעל בדיוק לפי ה-skill שב-
+            `.claude/skills/process-notes/SKILL.md` וחוקי `CLAUDE.md`.
+
+            אתה רץ באופן אוטומטי (headless) בתוך GitHub Action — אין משתמש
+            לשאול אותו שאלות. אם חסר מידע, השלם ברירות מחדל סבירות ואל תיעצר.
+
+            שלבים:
+            1. חפש קובצי `inbox/**/job.json`. לכל אחד: קרא אותו — הוא מגדיר את
+               הקורס (`course`), ההרצאה (`lecture`) ואת רשימת הדפים (`pages`,
+               בשמות `page-NN`, יחסיים לתיקיית ה-job).
+            2. אם `course.isNew` — צור את הקורס ב-`content/manifest.json`.
+            3. קרא ונתח כל דף מ-`pages` (בסדר), תמלל נאמן בעברית (מילה לא קריאה
+               → `[לא ברור: ניחוש?]`), והפק סיכום מובנה: הרעיון הכללי, ההיגיון
+               והאינטואיציה, שיטות פתרון עם דוגמה שלב-אחר-שלב, מושגי מפתח, ושאלות
+               לתרגול עצמי. מתמטיקה ב-KaTeX (`$...$` / `$$...$$`).
+            4. העבר את התמונות ל-
+               `content/courses/<course-id>/<lecture-id>/scans/page-NN.<ext>`,
+               כתוב `lecture.md`, ועדכן את `manifest.json` (status `ready`,
+               scans, 3–6 keywords). ודא JSON תקין.
+            5. מחק את תיקיית ה-job מ-`inbox/`.
+            6. בצע `git add -A && git commit -m "content: <קורס> — <הרצאה>" &&
+               git push`. (הדחיפה עם GITHUB_TOKEN לא מפעילה ריצה מחדש.)
+
+            כל התוכן שנוצר — בעברית. נתיבים יחסיים בלבד. אל תיגע בשום דבר מחוץ
+            ל-`content/` ו-`inbox/`.
+          claude_args: |
+            --allowedTools Edit,Read,Write,Bash,Glob,Grep
+            --max-turns 50

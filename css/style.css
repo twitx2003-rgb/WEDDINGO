@@ -981,6 +981,32 @@ mark { background: color-mix(in srgb, var(--warn) 30%, transparent); color: inhe
 }
 .studio-status.err { color: var(--gap); }
 
+/* חיבור GitHub */
+.gh-connect {
+  margin-bottom: var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+.gh-connect > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: .7rem var(--space-2);
+  font-weight: 500;
+  font-size: .9rem;
+  color: var(--ink-soft);
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.gh-connect > summary::-webkit-details-marker { display: none; }
+.gh-state { font-size: .78rem; color: var(--muted); margin-inline-start: auto; }
+.gh-state.ok { color: var(--ok); }
+.gh-fields { padding: 0 var(--space-2) var(--space-2); }
+.gh-fields .field { margin-bottom: .75rem; }
+.gh-fields .btn { margin-top: .25rem; }
+
 /* ---------- רספונסיביות ---------- */
 @media (max-width: 64rem) {
   .lecture-layout, .lecture-layout.with-source { grid-template-columns: 1fr; gap: var(--space-2); }
