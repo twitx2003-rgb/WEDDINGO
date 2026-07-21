@@ -833,7 +833,10 @@ mark { background: color-mix(in srgb, var(--warn) 30%, transparent); color: inhe
 }
 
 .field { margin-bottom: var(--space-2); }
-.field label { display: block; font-size: .85rem; font-weight: 500; color: var(--ink-soft); margin-bottom: .3rem; }
+.field label, .field-cap { display: block; font-size: .85rem; font-weight: 500; color: var(--ink-soft); margin-bottom: .3rem; }
+/* קלט קבצים מוסתר-ויזואלית אך פעיל (ה-<label> פותח את הבורר גם ב-iOS) */
+.sr-file { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); border: 0; }
+label.dropzone { display: block; }
 .field input[type="text"], .field input[type="date"], .field input[type="number"], .field select {
   width: 100%;
   padding: .55rem .8rem;
