@@ -1009,6 +1009,8 @@ label.dropzone { display: block; }
 .gh-fields { padding: 0 var(--space-2) var(--space-2); }
 .gh-fields .field { margin-bottom: .75rem; }
 .gh-fields .btn { margin-top: .25rem; }
+.studio-note.ok-text { color: var(--ok); font-weight: 500; }
+.studio-note.err-text { color: var(--gap); font-weight: 500; }
 
 /* ---------- רספונסיביות ---------- */
 @media (max-width: 64rem) {
